@@ -13,11 +13,124 @@
         "separator": ":",
         "value_key": "name",
         "value_transform": {
+          "match_type": 1,
           "replaces": {},
           "separators": []
         },
         "value_type": "string",
         "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "title"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "title",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
+  {
+    "tags": [
+      "test2"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "style"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "line",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {
+            "line": "",
+            "lines": ""
+          },
+          "separators": []
+        },
+        "value_type": "int",
+        "default_value": 0
+      },
+      {
+        "label_keywords": [
+          "your name",
+          "name",
+          "your baby name"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "name",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Choose your color scheme"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "color",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Lettering on the back"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "lettering",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {
+            "no": "false",
+            "yes": "true"
+          },
+          "separators": []
+        },
+        "value_type": "boolean",
+        "default_value": false
+      },
+      {
+        "label_keywords": [
+          "Choose your elements"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "elements",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": [
+            ",",
+            " ",
+            "-",
+            ":",
+            ".",
+            "and"
+          ]
+        },
+        "value_type": "array",
+        "default_value": []
       }
     ]
   }

@@ -26,6 +26,7 @@ type NormalizePattern struct {
 	Separator      string   `json:"separator"`      // 文本分隔符
 	ValueKey       string   `json:"value_key"`      // 解析后返回数据中值使用的 key
 	ValueTransform struct {
+		MatchType  int               `json:"match_type"` // 匹配方式
 		Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
 		Separators []string          `json:"separators"` // 分隔字符（返回为数组的时候可用）
 	} `json:"value_transform"` // 值转化方式
@@ -62,6 +63,7 @@ func (n *Normalizer) SetSeparator(sep string) *Normalizer {
 // SetOriginalText 设置要解析的文本内容
 func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	n.OriginalText = text
+	n.Items = map[string]interface{}{}
 	errors := n.Errors
 	if len(errors) > 0 && errors[0] == noOriginalErrorMessage {
 		if len(errors) == 1 {
@@ -112,6 +114,9 @@ func (n *Normalizer) Parse() *Normalizer {
 				}
 
 				rawValue := labelValue[1]
+				if pattern.ValueTransform.MatchType == BlurryMatch && len(pattern.ValueTransform.Replaces) > 0 {
+					rawValue = strings.ToLower(rawValue)
+				}
 				for oldValue, newValue := range pattern.ValueTransform.Replaces {
 					rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
 				}
