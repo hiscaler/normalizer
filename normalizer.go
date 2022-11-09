@@ -23,13 +23,13 @@ const (
 type NormalizePattern struct {
 	LabelKeywords  []string `json:"label_keywords"` // 标签关键词（可以有多个）
 	MatchType      int      `json:"match_type"`     // 匹配方式
-	Separator      string   `json:"separator"`      // 文本分隔符
+	Separator      string   `json:"separator"`      // 文本段分隔符
 	ValueKey       string   `json:"value_key"`      // 解析后返回数据中值使用的 key
 	ValueTransform struct {
 		MatchType  int               `json:"match_type"` // 匹配方式
 		Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
-		Separators []string          `json:"separators"` // 分隔字符（返回为数组的时候可用）
-	} `json:"value_transform"` // 值转化方式
+		Separators []string          `json:"separators"` // 值分隔符（返回为数组的时候可用）
+	} `json:"value_transform"` // 值转化设置
 	ValueType    string      `json:"value_type"`    // 值类型
 	DefaultValue interface{} `json:"default_value"` // 默认值
 }
@@ -42,11 +42,9 @@ type Normalizer struct {
 	Items        map[string]interface{} // 解析后返回的值
 }
 
-var noOriginalErrorMessage = "not set original text"
-
 func NewNormalizer() *Normalizer {
 	return &Normalizer{
-		Errors:    []string{noOriginalErrorMessage},
+		Errors:    []string{},
 		Separator: "\n",
 		Items:     make(map[string]interface{}, 0),
 	}
@@ -62,14 +60,7 @@ func (n *Normalizer) SetSeparator(sep string) *Normalizer {
 func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	n.OriginalText = strings.TrimSpace(text)
 	n.Items = map[string]interface{}{}
-	errors := n.Errors
-	if len(errors) > 0 && errors[0] == noOriginalErrorMessage {
-		if len(errors) == 1 {
-			n.Errors = make([]string, 0)
-		} else {
-			n.Errors = errors[1:]
-		}
-	}
+	n.Errors = []string{}
 	return n
 }
 
@@ -80,30 +71,32 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 		items[pattern.ValueKey] = pattern.DefaultValue
 	}
 	n.Items = items
+	n.Errors = []string{}
 	return n
 }
 
 // Parse 文本解析
 func (n *Normalizer) Parse() *Normalizer {
+	n.Errors = []string{}
 	if len(n.Patterns) == 0 {
 		return n
 	}
-	for _, text := range strings.Split(n.OriginalText, n.Separator) {
+	for _, lineText := range strings.Split(n.OriginalText, n.Separator) {
 		for _, pattern := range n.Patterns {
 			for _, keyword := range pattern.LabelKeywords {
 				if pattern.MatchType == BlurryMatch {
 					keyword = strings.ToLower(keyword)
 				}
-				rowSep := pattern.Separator
-				if rowSep == "" {
-					rowSep = ":"
+				segmentSep := pattern.Separator
+				if segmentSep == "" {
+					segmentSep = ":"
 				}
-				if !strings.Contains(text, rowSep) {
+				if !strings.Contains(lineText, segmentSep) {
 					continue
 				}
-				labelValue := strings.Split(text, rowSep)
+				segments := strings.Split(lineText, segmentSep)
 				matched := false
-				label := strings.TrimSpace(labelValue[0])
+				label := strings.TrimSpace(segments[0])
 				if pattern.MatchType == BlurryMatch {
 					matched = strings.Contains(label, keyword)
 				} else {
@@ -113,7 +106,7 @@ func (n *Normalizer) Parse() *Normalizer {
 					continue
 				}
 
-				rawValue := labelValue[1]
+				rawValue := segments[1]
 				if pattern.ValueTransform.MatchType == BlurryMatch && len(pattern.ValueTransform.Replaces) > 0 {
 					rawValue = strings.ToLower(rawValue)
 				}
