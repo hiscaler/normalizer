@@ -75,9 +75,11 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 
 func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Patterns = patterns
+	items := make(map[string]interface{}, len(patterns))
 	for _, pattern := range n.Patterns {
-		n.Items[pattern.ValueKey] = pattern.DefaultValue
+		items[pattern.ValueKey] = pattern.DefaultValue
 	}
+	n.Items = items
 	return n
 }
 
