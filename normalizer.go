@@ -50,7 +50,7 @@ func NewNormalizer() *Normalizer {
 	}
 }
 
-// SetSeparator 设置文本分隔符
+// SetSeparator 设置文本行分隔符
 func (n *Normalizer) SetSeparator(sep string) *Normalizer {
 	n.Separator = sep
 	return n
@@ -64,6 +64,7 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	return n
 }
 
+// SetPatterns 设置匹配规则
 func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
@@ -142,6 +143,7 @@ func (n *Normalizer) Parse() *Normalizer {
 	return n
 }
 
+// Ok 验证是否处理成功
 func (n *Normalizer) Ok() bool {
 	return len(n.Errors) == 0
 }
