@@ -30,8 +30,8 @@ type NormalizePattern struct {
 		Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
 		Separators []string          `json:"separators"` // 分隔字符（返回为数组的时候可用）
 	} `json:"value_transform"` // 值转化方式
-	ValueType    string `json:"value_type"`    // 值类型
-	DefaultValue string `json:"default_value"` // 默认值
+	ValueType    string      `json:"value_type"`    // 值类型
+	DefaultValue interface{} `json:"default_value"` // 默认值
 }
 
 type Normalizer struct {
@@ -40,7 +40,6 @@ type Normalizer struct {
 	OriginalText string                 // 原始的文本
 	Separator    string                 // 文本行分隔符
 	Patterns     []NormalizePattern     // 解析规则
-	CleanedText  string                 // 净化后的文本
 	Items        map[string]interface{} // 解析后返回的值
 }
 
@@ -51,7 +50,7 @@ func NewNormalizer(patterns []NormalizePattern) *Normalizer {
 		Separator: "\n",
 	}
 	for _, pattern := range n.Patterns {
-		n.Items[pattern.ValueKey] = nil
+		n.Items[pattern.ValueKey] = pattern.DefaultValue
 	}
 	return n
 }
@@ -132,7 +131,7 @@ func (n *Normalizer) Ok() bool {
 	return n.ok
 }
 
-// String 输出 JSON 字符串
-func (n *Normalizer) String() string {
+// Output 输出 JSON 字符串
+func (n *Normalizer) Output() string {
 	return jsonx.ToJson(n.Items, "{}")
 }
