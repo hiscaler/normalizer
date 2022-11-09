@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/hiscaler/gox/inx"
+	"github.com/stretchr/testify/assert"
 	"os"
 	"testing"
 )
@@ -22,7 +23,7 @@ type text struct {
 	Text      string
 	Separator string
 	Ok        bool
-	Output    string
+	Want      map[string]interface{}
 }
 
 func TestMain(m *testing.M) {
@@ -63,12 +64,20 @@ func TestNormalizer_Parse(t *testing.T) {
 				SetSeparator(d.Separator).
 				SetPatterns(p.Patterns).
 				Parse()
-			if normalizer.Ok() != d.Ok {
-				t.Errorf("%s normalizer.Ok() 期望 %v, 实际 %v", tag, d.Ok, normalizer.ok)
+			assert.Equal(t, d.Ok, normalizer.Ok(), "ok")
+			items := normalizer.Items
+			for k, v := range items {
+				if vv, ok := v.([]string); ok {
+					interfaceValues := make([]interface{}, len(vv))
+					for i := range vv {
+						interfaceValues[i] = vv[i]
+					}
+					items[k] = interfaceValues
+				} else if vv, ok := v.(int64); ok {
+					items[k] = float64(vv)
+				}
 			}
-			if normalizer.Output() != d.Output {
-				t.Errorf("%s normalizer.Output() 期望 %s, 实际 %s", tag, d.Output, normalizer.Output())
-			}
+			assert.Equal(t, d.Want, items, "items")
 			t.Logf("normalizer.Errors = %#v", normalizer.Errors)
 		}
 	}
