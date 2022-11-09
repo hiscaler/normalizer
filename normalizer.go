@@ -1,7 +1,6 @@
 package normalizer
 
 import (
-	"errors"
 	"github.com/hiscaler/gox/jsonx"
 	"github.com/hiscaler/gox/stringx"
 	"strconv"
@@ -36,23 +35,22 @@ type NormalizePattern struct {
 
 type Normalizer struct {
 	ok           bool                   // 解析是否成功
-	Errors       []error                // 错误列表
+	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
 	Separator    string                 // 文本行分隔符
 	Patterns     []NormalizePattern     // 解析规则
 	Items        map[string]interface{} // 解析后返回的值
 }
 
-func NewNormalizer(patterns []NormalizePattern) *Normalizer {
-	n := &Normalizer{
+var noOriginalErrorMessage = "not set original text"
+
+func NewNormalizer() *Normalizer {
+	return &Normalizer{
 		ok:        false,
-		Errors:    []error{errors.New("not set original text")},
+		Errors:    []string{noOriginalErrorMessage},
 		Separator: "\n",
+		Items:     make(map[string]interface{}, 0),
 	}
-	for _, pattern := range n.Patterns {
-		n.Items[pattern.ValueKey] = pattern.DefaultValue
-	}
-	return n
 }
 
 // SetSeparator 设置文本分隔符
@@ -64,6 +62,22 @@ func (n *Normalizer) SetSeparator(sep string) *Normalizer {
 // SetOriginalText 设置要解析的文本内容
 func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	n.OriginalText = text
+	errors := n.Errors
+	if len(errors) > 0 && errors[0] == noOriginalErrorMessage {
+		if len(errors) == 1 {
+			n.Errors = make([]string, 0)
+		} else {
+			n.Errors = errors[1:]
+		}
+	}
+	return n
+}
+
+func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
+	n.Patterns = patterns
+	for _, pattern := range n.Patterns {
+		n.Items[pattern.ValueKey] = pattern.DefaultValue
+	}
 	return n
 }
 
@@ -87,20 +101,22 @@ func (n *Normalizer) Parse() *Normalizer {
 				}
 				labelValue := strings.Split(text, rowSep)
 				matched := false
-				label := labelValue[0]
+				label := strings.TrimSpace(labelValue[0])
 				if pattern.MatchType == BlurryMatch {
 					matched = strings.Contains(label, keyword)
 				} else {
-					matched = strings.EqualFold(label, label)
+					matched = strings.EqualFold(label, keyword)
+				}
+				if !matched {
+					continue
 				}
 
-				rawValue := ""
-				if matched {
-					rawValue = labelValue[1]
-					for oldValue, newValue := range pattern.ValueTransform.Replaces {
-						rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
-					}
+				rawValue := labelValue[1]
+				for oldValue, newValue := range pattern.ValueTransform.Replaces {
+					rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
 				}
+				rawValue = strings.TrimSpace(rawValue)
+
 				var value interface{}
 				var err error
 				switch pattern.ValueType {
@@ -117,9 +133,10 @@ func (n *Normalizer) Parse() *Normalizer {
 					value = rawValue
 				}
 				if err != nil {
-					n.Errors = append(n.Errors, err)
+					n.Errors = append(n.Errors, err.Error())
 				}
 				n.Items[pattern.ValueKey] = value
+				break
 			}
 		}
 	}

@@ -1,0 +1,9 @@
+[
+  {
+    "tag": "test1",
+    "separator": "\n",
+    "text": "Custom Name Plate:\n  Layout Options : Name+Title\n  Fonts : Cinzel\n  Color : Gold (#d9bf2d)\n  Name : Lizzy Stevenson\n  Title : Financial Professional\n  Choose Your Favorite Size : 8\"long×2.5\"tall×0.59\"thick",
+    "ok": true,
+    "output": "{\"name\":\"Lizzy Stevenson\"}"
+  }
+]

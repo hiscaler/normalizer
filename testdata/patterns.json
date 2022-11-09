@@ -1,0 +1,24 @@
+[
+  {
+    "tags": [
+      "test1"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "your name",
+          "name"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "name",
+        "value_transform": {
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  }
+]
