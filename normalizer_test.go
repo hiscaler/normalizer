@@ -64,7 +64,7 @@ func TestNormalizer_Parse(t *testing.T) {
 				SetSeparator(d.Separator).
 				SetPatterns(p.Patterns).
 				Parse()
-			assert.Equal(t, d.Ok, normalizer.Ok(), "ok")
+			assert.Equal(t, d.Ok, normalizer.Ok(), "ok", normalizer.Errors)
 			items := normalizer.Items
 			for k, v := range items {
 				if vv, ok := v.([]string); ok {
@@ -77,8 +77,7 @@ func TestNormalizer_Parse(t *testing.T) {
 					items[k] = float64(vv)
 				}
 			}
-			assert.Equal(t, d.Want, items, "items")
-			t.Logf("normalizer.Errors = %#v", normalizer.Errors)
+			assert.Equal(t, d.Want, items, "items", normalizer.Errors)
 		}
 	}
 }

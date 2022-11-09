@@ -35,7 +35,6 @@ type NormalizePattern struct {
 }
 
 type Normalizer struct {
-	ok           bool                   // 解析是否成功
 	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
 	Separator    string                 // 文本行分隔符
@@ -47,7 +46,6 @@ var noOriginalErrorMessage = "not set original text"
 
 func NewNormalizer() *Normalizer {
 	return &Normalizer{
-		ok:        false,
 		Errors:    []string{noOriginalErrorMessage},
 		Separator: "\n",
 		Items:     make(map[string]interface{}, 0),
@@ -62,7 +60,7 @@ func (n *Normalizer) SetSeparator(sep string) *Normalizer {
 
 // SetOriginalText 设置要解析的文本内容
 func (n *Normalizer) SetOriginalText(text string) *Normalizer {
-	n.OriginalText = text
+	n.OriginalText = strings.TrimSpace(text)
 	n.Items = map[string]interface{}{}
 	errors := n.Errors
 	if len(errors) > 0 && errors[0] == noOriginalErrorMessage {
@@ -145,15 +143,15 @@ func (n *Normalizer) Parse() *Normalizer {
 			}
 		}
 	}
-	n.ok = len(n.Errors) == 0
+
 	return n
 }
 
 func (n *Normalizer) Ok() bool {
-	return n.ok
+	return len(n.Errors) == 0
 }
 
 // Output 输出 JSON 字符串
 func (n *Normalizer) Output() string {
-	return jsonx.ToJson(n.Items, "{}")
+	return jsonx.ToPrettyJson(n.Items)
 }
