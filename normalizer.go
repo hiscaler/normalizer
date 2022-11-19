@@ -39,11 +39,11 @@ type NormalizePattern struct {
 }
 
 type Normalizer struct {
+	labels       map[string]struct{}    // 文本中所有的标签
 	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
 	Separator    string                 // 文本行分隔符
 	Patterns     []NormalizePattern     // 解析规则
-	IgnoreLabels []string               // 忽略的标签
 	Items        map[string]interface{} // 解析后返回的值
 }
 
@@ -69,8 +69,16 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	return n
 }
 
-func (n *Normalizer) SetIgnoreLabels(labels []string) *Normalizer {
-	n.IgnoreLabels = labels
+func (n *Normalizer) SetLabels(labels []string) *Normalizer {
+	cleanedLabels := make(map[string]struct{}, 0)
+	for _, label := range labels {
+		label = strings.ToLower(strings.TrimSpace(label))
+		if label == "" {
+			continue
+		}
+		cleanedLabels[label] = struct{}{}
+	}
+	n.labels = cleanedLabels
 	return n
 }
 
@@ -111,21 +119,37 @@ func (n *Normalizer) Parse() *Normalizer {
 		valueType      string
 		valueTransform valueTransform
 	}
-	validLines := make([]labelValue, 0)
+
+	kvLines := make([]labelValue, 0)
+	appendText := true
 	for _, lineText := range strings.Split(n.OriginalText, n.Separator) {
 		lineText = strings.TrimSpace(lineText)
 		if lineText == "" {
 			continue
 		}
-		ignore := false
-		for _, label := range n.IgnoreLabels {
-			if strings.HasPrefix(strings.ToLower(lineText), strings.ToLower(label)) {
-				ignore = true
+
+		isPureText := true // 是否为纯文本（不包含标签）
+		lowerLineText := strings.ToLower(lineText)
+		for label := range n.labels {
+			if strings.HasPrefix(lowerLineText, label) {
+				isPureText = false
 				break
 			}
 		}
-		if ignore {
-			continue
+		if isPureText && appendText {
+			m := len(kvLines)
+			if m > 0 {
+				m--
+				kvLines = append(kvLines, labelValue{
+					key:            kvLines[m].key,
+					label:          kvLines[m].label,
+					value:          lineText,
+					valueType:      kvLines[m].valueType,
+					valueTransform: kvLines[m].valueTransform,
+				})
+			} else {
+				continue
+			}
 		}
 		matched := false
 		lv := labelValue{}
@@ -173,23 +197,16 @@ func (n *Normalizer) Parse() *Normalizer {
 			}
 		}
 		if matched {
-			validLines = append(validLines, lv)
+			appendText = true
+			kvLines = append(kvLines, lv)
 		} else {
-			m := len(validLines)
-			if m > 1 {
-				m--
-				validLines = append(validLines, labelValue{
-					key:            validLines[m].key,
-					label:          validLines[m].label,
-					value:          lineText,
-					valueType:      validLines[m].valueType,
-					valueTransform: validLines[m].valueTransform,
-				})
+			if !isPureText {
+				appendText = false
 			}
 		}
 	}
 
-	for _, line := range validLines {
+	for _, line := range kvLines {
 		rawValue := line.value
 		var value interface{}
 		var err error

@@ -1,9 +1,16 @@
 [
   {
     "tag": "test1",
+    "description": "",
     "separator": "\n",
     "text": "Custom Name Plate:\n  Layout Options : Name+Title\n  Fonts : Cinzel\n  Color : Gold (#d9bf2d)\n  Name : Lizzy Stevenson\n  Title : Financial Professional\n  Choose Your Favorite Size : 8\"long×2.5\"tall×0.59\"thick",
-    "ignore_labels": [
+    "labels": [
+      "Custom Name Plate",
+      "Layout Options",
+      "Fonts",
+      "Color",
+      "Name",
+      "Title",
       "Choose Your Favorite Size"
     ],
     "ok": true,
@@ -14,9 +21,15 @@
   },
   {
     "tag": "test2",
+    "description": "",
     "separator": "\n",
     "text": "Notes:\nStyle : 1 Line\nChoose your color scheme : Rainbow\nYour baby name : Chance\nChoose your elements : 09, 12\nLettering on the back : No\nWooden Pegs (Only letters have pegs) : Yes\nStand for the puzzle : No",
-    "ignore_labels": [
+    "labels": [
+      "Style",
+      "Choose your color scheme",
+      "Your baby name",
+      "Choose your elements",
+      "Lettering on the back",
       "Wooden Pegs (Only letters have pegs)",
       "Stand for the puzzle"
     ],
@@ -31,6 +44,84 @@
       "name": "Chance",
       "lettering": false,
       "backendTexts": []
+    }
+  },
+  {
+    "tag": "test3-保温杯",
+    "description": "获取颜色并将其转换为中文",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nCustom Front Photo: IMG_20221031_090251.jpg\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "Custom Front Photo",
+      "Custom Back Photo",
+      "Custom Back Text"
+    ],
+    "ok": true,
+    "want": {
+      "color": "黑色"
+    }
+  },
+  {
+    "tag": "test4-多行文本1",
+    "description": "",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nCustom Text: a\n\nb\nc\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo",
+      "Custom Back Text"
+    ],
+    "ok": true,
+    "want": {
+      "text": "a\nb\nc"
+    }
+  },
+  {
+    "tag": "test4-多行文本2",
+    "description": "多个空行只保留一个",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nCustom Text: a\n\nb\n\n\n\n\n\nc\n\n\n\n\n\n\n\n\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo",
+      "Custom Back Text"
+    ],
+    "ok": true,
+    "want": {
+      "text": "a\nb\nc"
+    }
+  },
+  {
+    "tag": "test4-多行文本3",
+    "description": "缺少 labels 定义，但是因为缺少的不是需要获取内容的下一个，所以依旧可以正确返回",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nCustom Text: a\n\nb\n\n\n\n\n\nc\n\n\n\n\n\n\n\n\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo"
+    ],
+    "ok": true,
+    "want": {
+      "text": "a\nb\nc"
+    }
+  },
+  {
+    "tag": "test4-多行文本4",
+    "description": "获取的内容的下一行数据 label 未定义，会将其归纳到上一行",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nCustom Text: a\n\nb\n\n\n\n\n\nc\n\n\n\n\n\n\n\n\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back text"
+    ],
+    "ok": true,
+    "want": {
+      "text": "a\nb\nc\nCustom Back Photo: 44743~2.jpeg"
     }
   }
 ]

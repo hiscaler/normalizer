@@ -19,12 +19,13 @@ type pattern struct {
 }
 
 type text struct {
-	Tag          string                 `json:"tag"`
-	Text         string                 `json:"text"`
-	IgnoreLabels []string               `json:"ignore_labels"`
-	Separator    string                 `json:"separator"`
-	Ok           bool                   `json:"ok"`
-	Want         map[string]interface{} `json:"want"`
+	Tag         string                 `json:"tag"`
+	Description string                 `json:"description"`
+	Text        string                 `json:"text"`
+	Labels      []string               `json:"labels"`
+	Separator   string                 `json:"separator"`
+	Ok          bool                   `json:"ok"`
+	Want        map[string]interface{} `json:"want"`
 }
 
 func TestMain(m *testing.M) {
@@ -63,7 +64,7 @@ func TestNormalizer_Parse(t *testing.T) {
 			}
 			normalizer.SetOriginalText(d.Text).
 				SetSeparator(d.Separator).
-				SetIgnoreLabels(d.IgnoreLabels).
+				SetLabels(d.Labels).
 				SetPatterns(p.Patterns).
 				Parse()
 			assert.Equal(t, d.Ok, normalizer.Ok(), "ok", normalizer.Errors)

@@ -39,7 +39,7 @@
   },
   {
     "tags": [
-      "test2", "test3"
+      "test2"
     ],
     "patterns": [
       {
@@ -146,6 +146,56 @@
         },
         "value_type": "string",
         "default_value": []
+      }
+    ]
+  },
+  {
+    "tags": [
+      "test3-保温杯"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Tumbler Color"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "color",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {
+            "black": "黑色",
+            "red": "红色"
+          },
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
+  {
+    "tags": [
+      "test4-多行文本1",
+      "test4-多行文本2",
+      "test4-多行文本3",
+      "test4-多行文本4"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Custom text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
       }
     ]
   }
