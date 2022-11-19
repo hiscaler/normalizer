@@ -39,7 +39,7 @@
   },
   {
     "tags": [
-      "test2"
+      "test2", "test3"
     ],
     "patterns": [
       {
@@ -130,6 +130,21 @@
           ]
         },
         "value_type": "array",
+        "default_value": []
+      },
+      {
+        "label_keywords": [
+          "Words carved on the back"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "backendTexts",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
         "default_value": []
       }
     ]
