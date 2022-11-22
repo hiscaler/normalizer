@@ -67,7 +67,7 @@ func TestNormalizer_Parse(t *testing.T) {
 				SetLabels(d.Labels).
 				SetPatterns(p.Patterns).
 				Parse()
-			assert.Equal(t, d.Ok, normalizer.Ok(), "ok", normalizer.Errors)
+			assert.Equal(t, d.Ok, normalizer.Ok(), "%s Ok() error: %#v", tag, normalizer.Errors)
 			items := normalizer.Items
 			for k, v := range items {
 				if vv, ok := v.([]string); ok {
@@ -80,7 +80,7 @@ func TestNormalizer_Parse(t *testing.T) {
 					items[k] = float64(vv)
 				}
 			}
-			assert.Equal(t, d.Want, items, "items", normalizer.Errors)
+			assert.Equal(t, d.Want, items, "%s 项目比对错误：%#v", tag, normalizer.Errors)
 		}
 	}
 }

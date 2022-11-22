@@ -123,5 +123,50 @@
     "want": {
       "text": "a\nb\nc\nCustom Back Photo: 44743~2.jpeg"
     }
+  },
+  {
+    "tag": "test5-数字1",
+    "description": "获取正常的数字",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nyou elements: 1 2 3 4 5\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "you elements",
+      "Custom Back photo"
+    ],
+    "ok": true,
+    "want": {
+      "numbers": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5"
+      ]
+    }
+  },
+  {
+    "tag": "test5-数字2",
+    "description": "获取多行且分隔符不同的数字",
+    "separator": "\n",
+    "text": "Tumbler Color: Black\nyou elements: 1 2 3\n four \n5-6-7-8\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "labels": [
+      "Tumbler Color",
+      "you elements",
+      "Custom Back photo"
+    ],
+    "ok": true,
+    "want": {
+      "numbers": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    }
   }
 ]

@@ -175,14 +175,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				if matched {
 					lv.key = pattern.ValueKey
 					lv.label = label
-					rawValue := segments[1]
-					if pattern.ValueTransform.MatchType == BlurryMatch && len(pattern.ValueTransform.Replaces) > 0 {
-						rawValue = strings.ToLower(rawValue)
-					}
-					for oldValue, newValue := range pattern.ValueTransform.Replaces {
-						rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
-					}
-					lv.value = strings.TrimSpace(rawValue)
+					lv.value = strings.TrimSpace(segments[1])
 					lv.valueType = pattern.ValueType
 					lv.valueTransform = valueTransform{
 						MatchType:  pattern.ValueTransform.MatchType,
@@ -208,6 +201,13 @@ func (n *Normalizer) Parse() *Normalizer {
 
 	for _, line := range kvLines {
 		rawValue := line.value
+		if line.valueTransform.MatchType == BlurryMatch && len(line.valueTransform.Replaces) > 0 {
+			rawValue = strings.ToLower(rawValue)
+			for oldValue, newValue := range line.valueTransform.Replaces {
+				rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
+			}
+			rawValue = strings.TrimSpace(rawValue)
+		}
 		var value interface{}
 		var err error
 		switch line.valueType {
@@ -244,79 +244,6 @@ func (n *Normalizer) Parse() *Normalizer {
 			n.Items[line.key] = value
 		}
 	}
-
-	// for _, lineText := range strings.Split(n.OriginalText, n.Separator) {
-	// 	matched := false
-	// 	for _, pattern := range n.Patterns {
-	// 		for _, keyword := range pattern.LabelKeywords {
-	// 			if pattern.MatchType == BlurryMatch {
-	// 				keyword = strings.ToLower(keyword)
-	// 			}
-	// 			segmentSep := pattern.Separator
-	// 			if segmentSep == "" {
-	// 				segmentSep = ":"
-	// 			}
-	// 			if !strings.Contains(lineText, segmentSep) {
-	// 				continue
-	// 			}
-	// 			segments := strings.Split(lineText, segmentSep)
-	// 			label := strings.TrimSpace(segments[0])
-	// 			if pattern.MatchType == BlurryMatch {
-	// 				matched = strings.Contains(label, keyword)
-	// 			} else {
-	// 				matched = strings.EqualFold(label, keyword)
-	// 			}
-	// 			if !matched {
-	// 				continue
-	// 			}
-	// 			currentValueKey = pattern.ValueKey
-	//
-	// 			rawValue := segments[1]
-	// 			if pattern.ValueTransform.MatchType == BlurryMatch && len(pattern.ValueTransform.Replaces) > 0 {
-	// 				rawValue = strings.ToLower(rawValue)
-	// 			}
-	// 			for oldValue, newValue := range pattern.ValueTransform.Replaces {
-	// 				rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
-	// 			}
-	// 			rawValue = strings.TrimSpace(rawValue)
-	//
-	// 			var value interface{}
-	// 			var err error
-	// 			switch pattern.ValueType {
-	// 			case booleanValueType:
-	// 				value, err = strconv.ParseBool(rawValue)
-	// 			case intValueType:
-	// 				value, err = strconv.ParseInt(rawValue, 10, 64)
-	// 			case floatValueType:
-	// 				value, err = strconv.ParseFloat(rawValue, 64)
-	// 			case arrayValueType:
-	// 				value = stringx.Split(rawValue, pattern.ValueTransform.Separators...)
-	// 			default:
-	// 				// Value is string type
-	// 				value = rawValue
-	// 			}
-	// 			if err != nil {
-	// 				n.Errors = append(n.Errors, err.Error())
-	// 			}
-	// 			n.Items[pattern.ValueKey] = value
-	// 			break
-	// 		}
-	// 	}
-	// 	if !matched && currentValueKey != "" {
-	// 		valueType := ""
-	//
-	// 		if v, ok := n.Items[currentValueKey]; ok {
-	// 			switch pattern.ValueType {
-	// 			case stringValueType:
-	// 				n.Items[currentValueKey] = fmt.Sprintf("%s\n%s", v, lineText)
-	// 			case arrayValueType:
-	// 				n.Items[currentValueKey] = append(v.([]string), lineText.([]string)...)
-	// 			default:
-	// 				n.Items[currentValueKey] = lineText
-	// 			}
-	// 		}
-	// 	}
-	// }
 
 	return n
 }

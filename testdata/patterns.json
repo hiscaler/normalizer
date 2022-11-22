@@ -198,5 +198,31 @@
         "default_value": ""
       }
     ]
+  },
+  {
+    "tags": [
+      "test5-数字1",
+      "test5-数字2"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "you elements"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "numbers",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {"four":  "4"},
+          "separators": [
+            " ",
+            "-"
+          ]
+        },
+        "value_type": "array",
+        "default_value": []
+      }
+    ]
   }
 ]
