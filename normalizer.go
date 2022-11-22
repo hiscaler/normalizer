@@ -22,7 +22,7 @@ const (
 	BlurryMatch          // 模糊匹配（只要包含相应的文本即认为匹配成功）
 )
 
-type valueTransform struct {
+type ValueTransform struct {
 	MatchType  int               `json:"match_type"` // 匹配方式
 	Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
 	Separators []string          `json:"separators"` // 值分隔符（返回为数组的时候可用）
@@ -33,7 +33,7 @@ type NormalizePattern struct {
 	MatchType      int            `json:"match_type"`      // 匹配方式
 	Separator      string         `json:"separator"`       // 文本段分隔符
 	ValueKey       string         `json:"value_key"`       // 解析后返回数据中值使用的 key
-	ValueTransform valueTransform `json:"value_transform"` // 值转化设置
+	ValueTransform ValueTransform `json:"value_transform"` // 值转化设置
 	ValueType      string         `json:"value_type"`      // 值类型
 	DefaultValue   interface{}    `json:"default_value"`   // 默认值
 }
@@ -117,7 +117,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		label          string
 		value          string
 		valueType      string
-		valueTransform valueTransform
+		valueTransform ValueTransform
 	}
 
 	kvLines := make([]labelValue, 0)
@@ -177,7 +177,7 @@ func (n *Normalizer) Parse() *Normalizer {
 					lv.label = label
 					lv.value = strings.TrimSpace(segments[1])
 					lv.valueType = pattern.ValueType
-					lv.valueTransform = valueTransform{
+					lv.valueTransform = ValueTransform{
 						MatchType:  pattern.ValueTransform.MatchType,
 						Replaces:   pattern.ValueTransform.Replaces,
 						Separators: pattern.ValueTransform.Separators,
@@ -201,8 +201,10 @@ func (n *Normalizer) Parse() *Normalizer {
 
 	for _, line := range kvLines {
 		rawValue := line.value
-		if line.valueTransform.MatchType == BlurryMatch && len(line.valueTransform.Replaces) > 0 {
-			rawValue = strings.ToLower(rawValue)
+		if len(line.valueTransform.Replaces) > 0 {
+			if line.valueTransform.MatchType == BlurryMatch {
+				rawValue = strings.ToLower(rawValue)
+			}
 			for oldValue, newValue := range line.valueTransform.Replaces {
 				rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
 			}
