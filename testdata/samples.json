@@ -103,5 +103,26 @@
         "8"
       ]
     }
+  },
+  {
+    "useName": "shopify",
+    "description": "Shopify 测试",
+    "text": "Type your name here (10 max):Beckham/Color Platte:Pastel-Boy/Additional elements (8 max):giraffe,fox,panda,soccer,rugby,basketball,fire engine,ice-cream truck-1/Select Accessories:Add Pegs | $2.90",
+    "ok": true,
+    "want": {
+      "name": "Beckham",
+      "color": "Pastel-Boy",
+      "icons": [
+        "giraffe",
+        "fox",
+        "panda",
+        "soccer",
+        "rugby",
+        "basketball",
+        "fire engine",
+        "ice-cream truck-1"
+      ],
+      "accessories": "Add Pegs | $2.90"
+    }
   }
 ]

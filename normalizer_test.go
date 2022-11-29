@@ -11,10 +11,10 @@ import (
 
 var normalizer *Normalizer
 var configs map[string]Config
-var texts []text
+var samples []sample
 
-type text struct {
-	UseName     string                 `json:"use_name"`
+type sample struct {
+	UseName     string                 `json:"useName"`
 	Description string                 `json:"description"`
 	Text        string                 `json:"text"`
 	Ok          bool                   `json:"ok"`
@@ -34,14 +34,14 @@ func TestMain(m *testing.M) {
 		panic(fmt.Sprintf("Parse config.json file error: %s", err.Error()))
 	}
 
-	b, err = os.ReadFile("./testdata/texts.json")
+	b, err = os.ReadFile("./testdata/samples.json")
 	if err != nil {
-		panic(fmt.Sprintf("Read texts.json file error: %s", err.Error()))
+		panic(fmt.Sprintf("Read samples.json file error: %s", err.Error()))
 	}
 
-	err = json.Unmarshal(b, &texts)
+	err = json.Unmarshal(b, &samples)
 	if err != nil {
-		panic(fmt.Sprintf("Parse texts.json file error: %s", err.Error()))
+		panic(fmt.Sprintf("Parse samples.json file error: %s", err.Error()))
 	}
 
 	normalizer = NewNormalizer()
@@ -49,7 +49,7 @@ func TestMain(m *testing.M) {
 }
 
 func TestNormalizer_Parse(t *testing.T) {
-	for _, d := range texts {
+	for _, d := range samples {
 		useName := d.UseName
 		for name, c := range configs {
 			if !strings.EqualFold(useName, name) {
@@ -60,7 +60,7 @@ func TestNormalizer_Parse(t *testing.T) {
 				SetLabels(c.Labels).
 				SetPatterns(c.Patterns).
 				Parse()
-			assert.Equal(t, d.Ok, normalizer.Ok(), "%s Ok() error: %#v", c.Name, normalizer.Errors)
+			assert.Equal(t, d.Ok, normalizer.Ok(), "%s Ok() error: %#v", name, normalizer.Errors)
 			items := normalizer.Items
 			for k, v := range items {
 				if vv, ok := v.([]string); ok {
@@ -73,7 +73,7 @@ func TestNormalizer_Parse(t *testing.T) {
 					items[k] = float64(vv)
 				}
 			}
-			assert.Equal(t, d.Want, items, "%s 项目比对错误：%#v", c.Name, normalizer.Errors)
+			assert.Equal(t, d.Want, items, "%s 项目比对错误：%#v", name, normalizer.Errors)
 		}
 	}
 }

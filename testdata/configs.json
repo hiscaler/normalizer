@@ -193,6 +193,7 @@
     ]
   },
   "test4-多行文本1": {
+    "separator": "\n",
     "labels": [
       "Tumbler Color",
       "Custom Text",
@@ -218,6 +219,7 @@
     ]
   },
   "test4-多行文本2": {
+    "separator": "\n",
     "labels": [
       "Tumbler Color",
       "Custom Text",
@@ -243,6 +245,7 @@
     ]
   },
   "test4-多行文本3": {
+    "separator": "\n",
     "labels": [
       "Tumbler Color",
       "Custom Text",
@@ -267,6 +270,7 @@
     ]
   },
   "test4-多行文本4": {
+    "separator": "\n",
     "labels": [
       "Tumbler Color",
       "Custom Text",
@@ -347,6 +351,93 @@
         },
         "value_type": "array",
         "default_value": []
+      }
+    ]
+  },
+  "shopify": {
+    "separator": "/",
+    "labels": [
+      "Type your name here (10 max)",
+      "Type your name here (8 max)",
+      "Type your name here (6 max)",
+      "Type your name here (4 max)",
+      "Type your name here (2 max)",
+      "Color Platte",
+      "Additional elements (8 max)",
+      "Additional elements (6 max)",
+      "Additional elements (4 max)",
+      "Additional elements (2 max)",
+      "Select Accessories"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Type your name here (10 max)",
+          "Type your name here (8 max)",
+          "Type your name here (6 max)",
+          "Type your name here (4 max)",
+          "Type your name here (2 max)"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "name",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Color Platte"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "color",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Additional elements (8 max)",
+          "Additional elements (6 max)",
+          "Additional elements (4 max)",
+          "Additional elements (2 max)"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "icons",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": [
+            ","
+          ]
+        },
+        "value_type": "array",
+        "default_value": []
+      },
+      {
+        "label_keywords": [
+          "Select Accessories"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "accessories",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
       }
     ]
   }
