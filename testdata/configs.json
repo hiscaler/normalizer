@@ -1,7 +1,14 @@
-[
-  {
-    "tags": [
-      "test1"
+{
+  "test1": {
+    "separator": "\n",
+    "labels": [
+      "Custom Name Plate",
+      "Layout Options",
+      "Fonts",
+      "Color",
+      "Name",
+      "Title",
+      "Choose Your Favorite Size"
     ],
     "patterns": [
       {
@@ -37,9 +44,16 @@
       }
     ]
   },
-  {
-    "tags": [
-      "test2"
+  "test2": {
+    "separator": "\n",
+    "labels": [
+      "Style",
+      "Choose your color scheme",
+      "Your baby name",
+      "Choose your elements",
+      "Lettering on the back",
+      "Wooden Pegs (Only letters have pegs)",
+      "Stand for the puzzle"
     ],
     "patterns": [
       {
@@ -149,9 +163,13 @@
       }
     ]
   },
-  {
-    "tags": [
-      "test3-保温杯"
+  "test3-保温杯": {
+    "separator": "\n",
+    "labels": [
+      "Tumbler Color",
+      "Custom Front Photo",
+      "Custom Back Photo",
+      "Custom Back Text"
     ],
     "patterns": [
       {
@@ -174,12 +192,12 @@
       }
     ]
   },
-  {
-    "tags": [
-      "test4-多行文本1",
-      "test4-多行文本2",
-      "test4-多行文本3",
-      "test4-多行文本4"
+  "test4-多行文本1": {
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo",
+      "Custom Back Text"
     ],
     "patterns": [
       {
@@ -199,10 +217,85 @@
       }
     ]
   },
-  {
-    "tags": [
-      "test5-数字1",
-      "test5-数字2"
+  "test4-多行文本2": {
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo",
+      "Custom Back Text"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Custom text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
+  "test4-多行文本3": {
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back Photo"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Custom text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
+  "test4-多行文本4": {
+    "labels": [
+      "Tumbler Color",
+      "Custom Text",
+      "Custom Back text"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Custom text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
+  "test5-数字1": {
+    "separator": "\n",
+    "labels": [
+      "Tumbler Color",
+      "you elements",
+      "Custom Back photo"
     ],
     "patterns": [
       {
@@ -214,7 +307,39 @@
         "value_key": "numbers",
         "value_transform": {
           "match_type": 1,
-          "replaces": {"four":  "4"},
+          "replaces": {
+            "four": "4"
+          },
+          "separators": [
+            " ",
+            "-"
+          ]
+        },
+        "value_type": "array",
+        "default_value": []
+      }
+    ]
+  },
+  "test5-数字2": {
+    "separator": "\n",
+    "labels": [
+      "Tumbler Color",
+      "you elements",
+      "Custom Back photo"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "you elements"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "numbers",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {
+            "four": "4"
+          },
           "separators": [
             " ",
             "-"
@@ -225,4 +350,4 @@
       }
     ]
   }
-]
+}

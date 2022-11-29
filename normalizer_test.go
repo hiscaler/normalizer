@@ -3,27 +3,20 @@ package normalizer
 import (
 	"encoding/json"
 	"fmt"
-	"github.com/hiscaler/gox/inx"
 	"github.com/stretchr/testify/assert"
 	"os"
+	"strings"
 	"testing"
 )
 
 var normalizer *Normalizer
-var patterns []pattern
+var configs map[string]Config
 var texts []text
 
-type pattern struct {
-	Tags     []string
-	Patterns []NormalizePattern
-}
-
 type text struct {
-	Tag         string                 `json:"tag"`
+	UseName     string                 `json:"use_name"`
 	Description string                 `json:"description"`
 	Text        string                 `json:"text"`
-	Labels      []string               `json:"labels"`
-	Separator   string                 `json:"separator"`
 	Ok          bool                   `json:"ok"`
 	Want        map[string]interface{} `json:"want"`
 }
@@ -31,14 +24,14 @@ type text struct {
 func TestMain(m *testing.M) {
 	var b []byte
 	var err error
-	b, err = os.ReadFile("./testdata/patterns.json")
+	b, err = os.ReadFile("./testdata/configs.json")
 	if err != nil {
-		panic(fmt.Sprintf("Read patterns.json file error: %s", err.Error()))
+		panic(fmt.Sprintf("Read configs.json file error: %s", err.Error()))
 	}
 
-	err = json.Unmarshal(b, &patterns)
+	err = json.Unmarshal(b, &configs)
 	if err != nil {
-		panic(fmt.Sprintf("Parse patterns.json file error: %s", err.Error()))
+		panic(fmt.Sprintf("Parse config.json file error: %s", err.Error()))
 	}
 
 	b, err = os.ReadFile("./testdata/texts.json")
@@ -57,17 +50,17 @@ func TestMain(m *testing.M) {
 
 func TestNormalizer_Parse(t *testing.T) {
 	for _, d := range texts {
-		tag := d.Tag
-		for _, p := range patterns {
-			if !inx.StringIn(tag, p.Tags...) {
+		useName := d.UseName
+		for name, c := range configs {
+			if !strings.EqualFold(useName, name) {
 				continue
 			}
 			normalizer.SetOriginalText(d.Text).
-				SetSeparator(d.Separator).
-				SetLabels(d.Labels).
-				SetPatterns(p.Patterns).
+				SetSeparator(c.Separator).
+				SetLabels(c.Labels).
+				SetPatterns(c.Patterns).
 				Parse()
-			assert.Equal(t, d.Ok, normalizer.Ok(), "%s Ok() error: %#v", tag, normalizer.Errors)
+			assert.Equal(t, d.Ok, normalizer.Ok(), "%s Ok() error: %#v", c.Name, normalizer.Errors)
 			items := normalizer.Items
 			for k, v := range items {
 				if vv, ok := v.([]string); ok {
@@ -80,7 +73,7 @@ func TestNormalizer_Parse(t *testing.T) {
 					items[k] = float64(vv)
 				}
 			}
-			assert.Equal(t, d.Want, items, "%s 项目比对错误：%#v", tag, normalizer.Errors)
+			assert.Equal(t, d.Want, items, "%s 项目比对错误：%#v", c.Name, normalizer.Errors)
 		}
 	}
 }
