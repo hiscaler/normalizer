@@ -106,7 +106,7 @@
   },
   {
     "useName": "shopify",
-    "description": "Shopify 测试",
+    "description": "Shopify 测试1",
     "text": "Type your name here (10 max):Beckham/Color Platte:Pastel-Boy/Additional elements (8 max):giraffe,fox,panda,soccer,rugby,basketball,fire engine,ice-cream truck-1/Select Accessories:Add Pegs | $2.90",
     "ok": true,
     "want": {
@@ -123,6 +123,27 @@
         "ice-cream truck-1"
       ],
       "accessories": "Add Pegs | $2.90"
+    }
+  },
+  {
+    "useName": "shopify",
+    "description": "Shopify 测试2",
+    "text": "Type your name here (10 max):Beckham/Color Platte:Pastel-Boy/Additional elements (8 max):giraffe,fox,panda,soccer,rugby,basketball,fire engine,ice-cream truck-1/Select Accessories:Add Stand,Add Pegs,Add Backside Engraving:here is text | $8.70",
+    "ok": true,
+    "want": {
+      "name": "Beckham",
+      "color": "Pastel-Boy",
+      "icons": [
+        "giraffe",
+        "fox",
+        "panda",
+        "soccer",
+        "rugby",
+        "basketball",
+        "fire engine",
+        "ice-cream truck-1"
+      ],
+      "accessories": "Add Stand,Add Pegs,Add Backside Engraving:here is text | $8.70"
     }
   }
 ]

@@ -175,7 +175,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				if matched {
 					lv.key = pattern.ValueKey
 					lv.label = label
-					lv.value = strings.TrimSpace(segments[1])
+					lv.value = strings.TrimSpace(strings.Join(segments[1:], segmentSep))
 					lv.valueType = pattern.ValueType
 					lv.valueTransform = ValueTransform{
 						MatchType:  pattern.ValueTransform.MatchType,
