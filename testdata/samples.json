@@ -149,10 +149,10 @@
   {
     "useName": "picture-puzzle",
     "description": "图片拼图",
-    "text": "custom photo:\nNumber of Pieces : 300\nImage (Optional) : CBD747AC-B8A1-4FF9-9028-CA79F23EEABB.jpeg",
+    "text": "custom photo:\nNumber of Pieces : 1,000\nImage (Optional) : CBD747AC-B8A1-4FF9-9028-CA79F23EEABB.jpeg",
     "ok": true,
     "want": {
-      "pieces": 300
+      "pieces": 1000
     }
   }
 ]

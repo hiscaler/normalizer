@@ -458,7 +458,9 @@
         "value_key": "pieces",
         "value_transform": {
           "match_type": 1,
-          "replaces": {},
+          "replaces": {
+            ",": ""
+          },
           "separators": []
         },
         "value_type": "int",
