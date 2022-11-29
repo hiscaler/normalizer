@@ -22,6 +22,12 @@ name:John\nage: 12 years\nfuns:Basketball,Football and Swimming
 }
 ```
 
+## 安装
+
+```go
+go get github.com/hiscaler/normalizer
+```
+
 ## 使用
 ```go
 normalizer = NewNormalizer()
