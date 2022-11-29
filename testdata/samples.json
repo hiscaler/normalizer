@@ -145,5 +145,14 @@
       ],
       "accessories": "Add Stand,Add Pegs,Add Backside Engraving:here is text | $8.70"
     }
+  },
+  {
+    "useName": "picture-puzzle",
+    "description": "图片拼图",
+    "text": "custom photo:\nNumber of Pieces : 300\nImage (Optional) : CBD747AC-B8A1-4FF9-9028-CA79F23EEABB.jpeg",
+    "ok": true,
+    "want": {
+      "pieces": 300
+    }
   }
 ]

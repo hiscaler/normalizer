@@ -440,5 +440,30 @@
         "default_value": ""
       }
     ]
+  },
+  "picture-puzzle": {
+    "separator": "\n",
+    "labels": [
+      "custom photo",
+      "Number of Pieces",
+      "Image (Optional)"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "Number of Pieces"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "pieces",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "int",
+        "default_value": 0
+      }
+    ]
   }
 }
