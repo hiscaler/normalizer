@@ -23,7 +23,7 @@ const (
 )
 
 type ValueTransform struct {
-	MatchType  int               `json:"match_type"` // 匹配方式
+	MatchType  int               `json:"match_type"` // 匹配方式（0: 精准匹配、1: 模糊匹配）
 	Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
 	Separators []string          `json:"separators"` // 值分隔符（返回为数组的时候可用）
 }
