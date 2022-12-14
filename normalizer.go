@@ -70,13 +70,13 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 }
 
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
-	cleanedLabels := make(map[string]struct{}, 0)
+	cleanedLabels := make(map[string]struct{}, len(labels))
 	for _, label := range labels {
-		label = strings.ToLower(strings.TrimSpace(label))
+		label = strings.TrimSpace(label)
 		if label == "" {
 			continue
 		}
-		cleanedLabels[label] = struct{}{}
+		cleanedLabels[strings.ToLower(label)] = struct{}{}
 	}
 	n.labels = cleanedLabels
 	return n
