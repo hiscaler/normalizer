@@ -177,9 +177,6 @@ func (n *Normalizer) Parse() *Normalizer {
 		lv := labelValue{}
 		for _, pattern := range n.Patterns {
 			for _, keyword := range pattern.LabelKeywords {
-				if pattern.MatchType == BlurryMatch {
-					keyword = strings.ToLower(keyword)
-				}
 				segmentSep := pattern.Separator
 				if segmentSep == "" {
 					segmentSep = ":"
@@ -190,7 +187,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				segments := strings.Split(lineText, segmentSep)
 				label := strings.TrimSpace(segments[0])
 				if pattern.MatchType == BlurryMatch {
-					matched = strings.Contains(label, keyword)
+					matched = strings.Contains(label, strings.ToLower(keyword))
 				} else {
 					matched = strings.EqualFold(label, keyword)
 				}
