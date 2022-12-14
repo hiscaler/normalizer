@@ -229,7 +229,7 @@ func (n *Normalizer) Parse() *Normalizer {
 			}
 
 			// 根据字符的长度执行替换的顺序，比如替换 {"fourteen": 14, "four": 4} 的规则应用于
-			// `fourteen,four` 将会替换为 `14,4`
+			// `fourteen,four` 替换后的值为 `14,4`
 			keys := make([]string, 0)
 			for k := range line.valueTransform.Replaces {
 				if k == "" {

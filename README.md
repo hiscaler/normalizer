@@ -29,6 +29,7 @@ go get github.com/hiscaler/normalizer
 ```
 
 ## 使用
+
 ```go
 normalizer = NewNormalizer()
 normalizer.SetOriginalText("name:John\\nage: 12 years\\nmy fun:Basketball,Football and Swimming").
@@ -62,7 +63,7 @@ normalizer.SetOriginalText("name:John\\nage: 12 years\\nmy fun:Basketball,Footba
             LabelKeywords: []string{"my fun"},
             MatchType:     0,
             Separator:     ":",
-            ValueKey:      "fun",
+            ValueKey:      "funs",
             ValueType:     "array",
             ValueTransform: ValueTransform{
                 MatchType:  0,
@@ -79,5 +80,5 @@ fmt.Printf("items = %#v", normalizer.Items)
 将会输出
 
 ```go
-map[string]interface {}{"age":12, "fun":[]interface {}{"Basketball", "Football", "Swimming"}, "name":"John"}
+map[string]interface {}{"age":12, "funs":[]interface {}{"Basketball", "Football", "Swimming"}, "name":"John"}
 ```
