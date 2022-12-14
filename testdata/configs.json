@@ -342,7 +342,8 @@
         "value_transform": {
           "match_type": 1,
           "replaces": {
-            "four": "4"
+            "four": "4",
+            "fourteen": "14"
           },
           "separators": [
             " ",

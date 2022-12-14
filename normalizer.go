@@ -7,6 +7,7 @@ import (
 	"github.com/hiscaler/gox/stringx"
 	"github.com/spf13/cast"
 	"go/types"
+	"sort"
 	"strconv"
 	"strings"
 )
@@ -226,9 +227,28 @@ func (n *Normalizer) Parse() *Normalizer {
 			if line.valueTransform.MatchType == BlurryMatch {
 				rawValue = strings.ToLower(rawValue)
 			}
-			for oldValue, newValue := range line.valueTransform.Replaces {
-				rawValue = strings.ReplaceAll(rawValue, oldValue, newValue)
+
+			// 根据字符的长度执行替换的顺序，比如替换 {"fourteen": 14, "four": 4} 的规则应用于
+			// `fourteen,four` 将会替换为 `14,4`
+			keys := make([]string, 0)
+			for k := range line.valueTransform.Replaces {
+				if k == "" {
+					continue
+				}
+				keys = append(keys, k)
 			}
+			if len(keys) > 0 {
+				sort.Slice(keys, func(i, j int) bool {
+					return len(keys[i]) > len(keys[j])
+				})
+				oldNews := make([]string, len(keys)*2)
+				for i, key := range keys {
+					oldNews[i*2] = key
+					oldNews[i*2+1] = line.valueTransform.Replaces[key]
+				}
+				rawValue = strings.NewReplacer(oldNews...).Replace(rawValue)
+			}
+
 			rawValue = strings.TrimSpace(rawValue)
 		}
 		var value interface{}

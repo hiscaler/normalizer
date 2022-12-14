@@ -105,6 +105,25 @@
     }
   },
   {
+    "useName": "test5-数字2",
+    "description": "获取多行且分隔符不同的数字",
+    "text": "Tumbler Color: Black\nyou elements: 1 2 3\n four fourteen \n5-6-7-8\nCustom Back Photo: 44743~2.jpeg\nCustom Back Text: MY FOREVER HUSBAND!",
+    "ok": true,
+    "want": {
+      "numbers": [
+        "1",
+        "2",
+        "3",
+        "4",
+        "14",
+        "5",
+        "6",
+        "7",
+        "8"
+      ]
+    }
+  },
+  {
     "useName": "shopify",
     "description": "Shopify 测试1",
     "text": "Type your name here (10 max):Beckham/Color Platte:Pastel-Boy/Additional elements (8 max):giraffe,fox,panda,soccer,rugby,basketball,fire engine,ice-cream truck-1/Select Accessories:Add Pegs | $2.90",
