@@ -130,7 +130,7 @@ func (n *Normalizer) notInLabels(label string) bool {
 // Parse 文本解析
 func (n *Normalizer) Parse() *Normalizer {
 	n.Errors = []string{}
-	if len(n.Patterns) == 0 {
+	if len(n.Patterns) == 0 || n.OriginalText == "" {
 		return n
 	}
 
