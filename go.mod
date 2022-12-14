@@ -2,6 +2,7 @@ module github.com/hiscaler/normalizer
 
 require (
 	github.com/hiscaler/gox v0.0.0-20220629052934-54366dbaee3b
+	github.com/spf13/cast v1.5.0
 	github.com/stretchr/testify v1.7.0
 )
 

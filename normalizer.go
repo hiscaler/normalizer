@@ -5,6 +5,8 @@ import (
 	"github.com/hiscaler/gox/jsonx"
 	"github.com/hiscaler/gox/slicex"
 	"github.com/hiscaler/gox/stringx"
+	"github.com/spf13/cast"
+	"go/types"
 	"strconv"
 	"strings"
 )
@@ -87,7 +89,26 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
 	for _, pattern := range n.Patterns {
-		items[pattern.ValueKey] = pattern.DefaultValue
+		// 防止默认值设置错误
+		defaultValue := pattern.DefaultValue
+		switch pattern.ValueType {
+		case booleanValueType:
+			defaultValue = cast.ToBool(defaultValue)
+		case arrayValueType:
+			switch defaultValue.(type) {
+			case types.Slice:
+				defaultValue = cast.ToSlice(defaultValue)
+			default:
+				defaultValue = []interface{}{}
+			}
+		case intValueType:
+			defaultValue = cast.ToInt(defaultValue)
+		case floatValueType:
+			defaultValue = cast.ToFloat64(defaultValue)
+		default:
+			defaultValue = cast.ToString(defaultValue)
+		}
+		items[pattern.ValueKey] = defaultValue
 	}
 	n.Items = items
 	n.Errors = []string{}

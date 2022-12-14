@@ -159,7 +159,7 @@
           "separators": []
         },
         "value_type": "string",
-        "default_value": []
+        "default_value": ""
       }
     ]
   },
