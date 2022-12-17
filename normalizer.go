@@ -223,6 +223,11 @@ func (n *Normalizer) Parse() *Normalizer {
 		if len(line.valueTransform.Replaces) > 0 {
 			if line.valueTransform.MatchType == BlurryMatch {
 				rawValue = strings.ToLower(rawValue)
+				replaces := make(map[string]string, len(line.valueTransform.Replaces))
+				for k, v := range line.valueTransform.Replaces {
+					replaces[strings.ToLower(k)] = v
+				}
+				line.valueTransform.Replaces = replaces
 			}
 
 			// 根据字符的长度执行替换的顺序，比如替换 {"fourteen": 14, "four": 4} 的规则应用于

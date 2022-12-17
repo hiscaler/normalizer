@@ -173,5 +173,18 @@
     "want": {
       "pieces": 1000
     }
+  },
+  {
+    "useName": "mug",
+    "description": "马克杯",
+    "text": "Font: Lato\nColor: Black (#000000)\nCustom Front Text: I Know Lots of\nHistory Stuff\nCustom Back Text: What's Your\nSUPERPOWER?\nSelect print area: Print on both sides\nBeautiful gift box: NO",
+    "ok": true,
+    "want": {
+      "font_name": "Lato",
+      "color": "Black (#000000)",
+      "front_text": "I Know Lots of\nHistory Stuff",
+      "back_text": "What's Your\nSUPERPOWER?",
+      "gift_box": false
+    }
   }
 ]

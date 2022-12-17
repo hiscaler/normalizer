@@ -468,5 +468,96 @@
         "default_value": 0
       }
     ]
+  },
+  "mug": {
+    "separator": "\n",
+    "labels": [
+      "font",
+      "color",
+      "Custom Front Text",
+      "Custom Back Text",
+      "Select print area",
+      "Beautiful gift box"
+    ],
+    "patterns": [
+      {
+        "label_keywords": [
+          "font"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "font_name",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "color"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "color",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Custom Front Text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "front_text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Custom Back Text"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "back_text",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Beautiful gift box"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "gift_box",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {
+            "YES": "true",
+            "NO": "false"
+          },
+          "separators": []
+        },
+        "value_type": "boolean",
+        "default_value": false
+      }
+    ]
   }
 }
