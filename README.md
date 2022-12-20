@@ -82,3 +82,9 @@ fmt.Printf("items = %#v", normalizer.Items)
 ```go
 map[string]interface {}{"age":12, "funs":[]interface {}{"Basketball", "Football", "Swimming"}, "name":"John"}
 ```
+
+## 注意
+
+在使用 Parse() 方法对文本进行解析之后，您应该使用 normalizer.Ok() 来判断处理结果是否存在错误，为 false 的情况下，您可以通过 normalizer.Errors() 来获取所有的错误信息，以决定后续的业务流程。
+
+在使用 Parse() 方法之前，您也可以使用 Validate() 方法来判断您的设置是否正确。比如未设置文本分隔符、重复的 key 等情况错误存在的情况下，Validate() 方法将返回对应的错误。
