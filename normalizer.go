@@ -1,7 +1,9 @@
 package normalizer
 
 import (
+	"errors"
 	"fmt"
+	"github.com/hiscaler/gox/inx"
 	"github.com/hiscaler/gox/jsonx"
 	"github.com/hiscaler/gox/slicex"
 	"github.com/hiscaler/gox/stringx"
@@ -131,6 +133,11 @@ func (n *Normalizer) notInLabels(label string) bool {
 func (n *Normalizer) Parse() *Normalizer {
 	n.Errors = []string{}
 	if len(n.Patterns) == 0 || n.OriginalText == "" {
+		return n
+	}
+	err := n.Validate()
+	if err != nil {
+		n.Errors = append(n.Errors, err.Error())
 		return n
 	}
 
@@ -291,6 +298,46 @@ func (n *Normalizer) Parse() *Normalizer {
 	}
 
 	return n
+}
+
+// Validate 验证设置是否有效
+func (n *Normalizer) Validate() error {
+	if n.Separator == "" {
+		return errors.New("文本行分隔符不能为空")
+	}
+	m := len(n.Patterns)
+	if m == 0 {
+		return errors.New("未设置解析规则")
+	}
+
+	valueTypes := []string{stringValueType, booleanValueType, floatValueType, intValueType, arrayValueType}
+
+	for i, p1 := range n.Patterns {
+		if strings.TrimSpace(p1.ValueKey) == "" {
+			return fmt.Errorf("解析规则第 %d 项未设置键名", i+1)
+		}
+		if !inx.StringIn(p1.ValueType, valueTypes...) {
+			return fmt.Errorf("解析规则第 %d 项返回值类型 %s 设置有误，有效的类型为：%s", i+1, p1.ValueType, strings.Join(valueTypes, ", "))
+		}
+		if len(p1.LabelKeywords) == 0 {
+			return fmt.Errorf("解析规则第 %d 项未设置标签关键词", i+1)
+		}
+		for j := i + 1; j < m; j++ {
+			p2 := n.Patterns[j]
+			if strings.EqualFold(p1.ValueKey, p2.ValueKey) {
+				return fmt.Errorf("解析规则第 %d 项与第 %d 项 %s 键名重复", i+1, j+1, p1.ValueKey)
+			}
+			for _, k1 := range p1.LabelKeywords {
+				for _, k2 := range p2.LabelKeywords {
+					if strings.EqualFold(k1, k2) {
+						return fmt.Errorf("解析规则第 %d 项与第 %d 项 %s 标签关键词重复", i+1, j+1, k1)
+					}
+				}
+			}
+		}
+	}
+
+	return nil
 }
 
 // Ok 验证是否处理成功

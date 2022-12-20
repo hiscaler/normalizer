@@ -60,6 +60,7 @@ func TestNormalizer_Parse(t *testing.T) {
 				SetLabels(c.Labels).
 				SetPatterns(c.Patterns).
 				Parse()
+			assert.Equal(t, nil, normalizer.Validate(), "%s - %s Validate() error: %#v", name, d.Description, normalizer.Errors)
 			assert.Equal(t, d.Ok, normalizer.Ok(), "%s - %s Ok() error: %#v", name, d.Description, normalizer.Errors)
 			items := normalizer.Items
 			for k, v := range items {
