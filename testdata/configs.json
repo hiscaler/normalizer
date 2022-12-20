@@ -472,32 +472,29 @@
   "mug": {
     "separator": "\n",
     "labels": [
+      "mug color",
+      "size",
+      "CHOOSE YOUR SIZE",
       "font",
+      "Font Type",
+      "Font Color",
       "color",
       "Custom Front Text",
+      "Custom 1st Text",
       "Custom Back Text",
+      "Custom 2nd Text",
+      "Custom Front Photo",
+      "Custom 1st Photo",
+      "Custom Back Photo",
+      "Custom 2nd Photo",
       "Select print area",
-      "Beautiful gift box"
+      "Beautiful gift box",
+      "Beautiful box"
     ],
     "patterns": [
       {
         "label_keywords": [
-          "font"
-        ],
-        "match_type": 0,
-        "separator": ":",
-        "value_key": "font_name",
-        "value_transform": {
-          "match_type": 1,
-          "replaces": {},
-          "separators": []
-        },
-        "value_type": "string",
-        "default_value": ""
-      },
-      {
-        "label_keywords": [
-          "color"
+          "mug color"
         ],
         "match_type": 0,
         "separator": ":",
@@ -512,7 +509,56 @@
       },
       {
         "label_keywords": [
-          "Custom Front Text"
+          "Size",
+          "CHOOSE YOUR SIZE"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "size",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "font",
+          "font type"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "font_name",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "font color",
+          "color"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "font_color",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Custom Front Text",
+          "Custom 1st Text"
         ],
         "match_type": 0,
         "separator": ":",
@@ -527,7 +573,8 @@
       },
       {
         "label_keywords": [
-          "Custom Back Text"
+          "Custom Back Text",
+          "Custom 2nd Text"
         ],
         "match_type": 0,
         "separator": ":",
@@ -542,7 +589,55 @@
       },
       {
         "label_keywords": [
-          "Beautiful gift box"
+          "Custom Front Photo",
+          "Custom 1st Photo"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "front_image",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Custom Back Photo",
+          "Custom 2nd Photo"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "back_image",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Select print area"
+        ],
+        "match_type": 0,
+        "separator": ":",
+        "value_key": "print_area",
+        "value_transform": {
+          "match_type": 1,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "label_keywords": [
+          "Beautiful gift box",
+          "Beautiful box"
         ],
         "match_type": 0,
         "separator": ":",

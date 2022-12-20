@@ -176,15 +176,38 @@
   },
   {
     "useName": "mug",
-    "description": "马克杯",
+    "description": "马克杯-1",
     "text": "Font: Lato\nColor: Black (#000000)\nCustom Front Text: I Know Lots of\nHistory Stuff\nCustom Back Text: What's Your\nSUPERPOWER?\nSelect print area: Print on both sides\nBeautiful gift box: NO",
     "ok": true,
     "want": {
+      "color": "",
+      "size": "",
       "font_name": "Lato",
-      "color": "Black (#000000)",
+      "font_color": "Black (#000000)",
       "front_text": "I Know Lots of\nHistory Stuff",
       "back_text": "What's Your\nSUPERPOWER?",
+      "print_area": "Print on both sides",
+      "front_image": "",
+      "back_image": "",
       "gift_box": false
+    }
+  },
+  {
+    "useName": "mug",
+    "description": "马克杯-2",
+    "text": "mug color: black\nCustom Front Photo: Capture+_2019-10-30-08-08-24-1.png\nFont Type: Fredericka the Great\nFont Color: black (#000000)\nCustom 1st Text: Gracias  por compartir con migo  de tu valioso tiempo** te quiero mucho \n       Feliz Navidad  y Prospero Año Nuevo 2023   Atte: FH\nSelect print area: Print front\nBeautiful gift box: yes",
+    "ok": true,
+    "want": {
+      "color": "black",
+      "size": "",
+      "font_name": "Fredericka the Great",
+      "font_color": "black (#000000)",
+      "front_text": "Gracias  por compartir con migo  de tu valioso tiempo** te quiero mucho\nFeliz Navidad  y Prospero Año Nuevo 2023   Atte: FH",
+      "back_text": "",
+      "front_image": "Capture+_2019-10-30-08-08-24-1.png",
+      "back_image": "",
+      "print_area": "Print front",
+      "gift_box": true
     }
   }
 ]
