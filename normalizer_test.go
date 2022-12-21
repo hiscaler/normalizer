@@ -125,3 +125,54 @@ func Example() {
 
 	fmt.Printf("items = %#v", normalizer.Items)
 }
+
+func normalizerExecute() {
+	normalizer = NewNormalizer()
+	normalizer.SetOriginalText("name:John\\nage: 12 years\\nmy fun:Basketball,Football and Swimming").
+		SetSeparator("\\n").
+		SetLabels([]string{"name", "age", "my fun"}).
+		SetPatterns([]NormalizePattern{
+			{
+				Labels:       []string{"name"},
+				MatchMethod:  0,
+				Separator:    ":",
+				ValueKey:     "name",
+				ValueType:    "string",
+				DefaultValue: "",
+			},
+			{
+				Labels:      []string{"age"},
+				MatchMethod: 0,
+				Separator:   ":",
+				ValueKey:    "age",
+				ValueType:   "int",
+				ValueTransform: ValueTransform{
+					MatchMethod: 0,
+					Replaces: map[string]string{
+						"years": "",
+					},
+					Separators: nil,
+				},
+				DefaultValue: 10,
+			},
+			{
+				Labels:      []string{"my fun"},
+				MatchMethod: 0,
+				Separator:   ":",
+				ValueKey:    "fun",
+				ValueType:   "array",
+				ValueTransform: ValueTransform{
+					MatchMethod: 0,
+					Separators:  []string{",", "and"},
+				},
+				DefaultValue: []interface{}{},
+			},
+		}).
+		Parse()
+}
+
+func Benchmark(b *testing.B) {
+	for i := 0; i < b.N; i++ {
+		normalizerExecute()
+	}
+}

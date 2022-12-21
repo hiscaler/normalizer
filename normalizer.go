@@ -75,11 +75,10 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 }
 
 func cleanLabel(label string) string {
-	strings.TrimSpace(label)
 	if label == "" {
 		return ""
 	}
-	return strings.ToLower(label)
+	return strings.ToLower(strings.TrimSpace(label))
 }
 
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
@@ -99,7 +98,16 @@ func (n *Normalizer) SetLabels(labels []string) *Normalizer {
 func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
-	for _, pattern := range n.Patterns {
+	for i, pattern := range n.Patterns {
+		// 规则设置规则
+		if pattern.Separator == "" {
+			n.Patterns[i].Separator = ":" // Default separator value
+		}
+		for k := range pattern.ValueTransform.Replaces {
+			if k == "" {
+				delete(n.Patterns[i].ValueTransform.Replaces, k)
+			}
+		}
 		for _, label := range pattern.Labels {
 			label = cleanLabel(label)
 			if label == "" {
@@ -191,9 +199,6 @@ func (n *Normalizer) Parse() *Normalizer {
 		for _, pattern := range n.Patterns {
 			for _, keyword := range pattern.Labels {
 				segmentSep := pattern.Separator
-				if segmentSep == "" {
-					segmentSep = ":"
-				}
 				if !strings.Contains(lineText, segmentSep) {
 					continue
 				}
@@ -247,9 +252,6 @@ func (n *Normalizer) Parse() *Normalizer {
 			// `fourteen,four` 替换后的值为 `14,4`
 			keys := make([]string, 0)
 			for k := range line.valueTransform.Replaces {
-				if k == "" {
-					continue
-				}
 				keys = append(keys, k)
 			}
 			if len(keys) > 0 {
@@ -329,9 +331,10 @@ func (n *Normalizer) Validate() error {
 
 	valueTypes := []string{stringValueType, booleanValueType, floatValueType, intValueType, arrayValueType}
 
-	for i, p1 := range n.Patterns {
+	for i := range n.Patterns {
+		p1 := n.Patterns[i]
 		if strings.TrimSpace(p1.ValueKey) == "" {
-			return fmt.Errorf("解析规则第 %d 项未设置键名", i+1)
+			return fmt.Errorf("解析规则第 %d 项未设置键名或者为空", i+1)
 		}
 		if !inx.StringIn(p1.ValueType, valueTypes...) {
 			return fmt.Errorf("解析规则第 %d 项返回值类型 %s 设置有误，有效的类型为：%s", i+1, p1.ValueType, strings.Join(valueTypes, ", "))
