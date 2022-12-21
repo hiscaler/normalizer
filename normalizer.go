@@ -23,19 +23,19 @@ const (
 )
 
 const (
-	AccurateMatch = iota // 精准匹配
-	BlurryMatch          // 模糊匹配（只要包含相应的文本即认为匹配成功）
+	ExactMatch = iota // 精准匹配
+	FuzzyMatch        // 模糊匹配（只要包含相应的文本即认为匹配成功）
 )
 
 type ValueTransform struct {
-	MatchType  int               `json:"match_type"` // 匹配方式（0: 精准匹配、1: 模糊匹配）
-	Replaces   map[string]string `json:"replaces"`   // 需要替换的字符串
-	Separators []string          `json:"separators"` // 值分隔符（返回为数组的时候可用）
+	MatchMethod int               `json:"match_method"` // 匹配方式（0: 精准匹配、1: 模糊匹配）
+	Replaces    map[string]string `json:"replaces"`     // 需要替换的字符串
+	Separators  []string          `json:"separators"`   // 值分隔符（返回为数组的时候可用）
 }
 
 type NormalizePattern struct {
-	LabelKeywords  []string       `json:"label_keywords"`  // 标签关键词（可以有多个）
-	MatchType      int            `json:"match_type"`      // 匹配方式
+	Labels         []string       `json:"labels"`          // 标签关键词（可以有多个）
+	MatchMethod    int            `json:"match_method"`    // 匹配方式（0: 精准匹配、1: 模糊匹配）
 	Separator      string         `json:"separator"`       // 文本段分隔符
 	ValueKey       string         `json:"value_key"`       // 解析后返回数据中值使用的 key
 	ValueTransform ValueTransform `json:"value_transform"` // 值转化设置
@@ -74,14 +74,22 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	return n
 }
 
+func cleanLabel(label string) string {
+	strings.TrimSpace(label)
+	if label == "" {
+		return ""
+	}
+	return strings.ToLower(label)
+}
+
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
 	cleanedLabels := make(map[string]struct{}, len(labels))
 	for _, label := range labels {
-		label = strings.TrimSpace(label)
+		label = cleanLabel(label)
 		if label == "" {
 			continue
 		}
-		cleanedLabels[strings.ToLower(label)] = struct{}{}
+		cleanedLabels[label] = struct{}{}
 	}
 	n.labels = cleanedLabels
 	return n
@@ -92,6 +100,15 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
 	for _, pattern := range n.Patterns {
+		for _, label := range pattern.Labels {
+			label = cleanLabel(label)
+			if label == "" {
+				continue
+			}
+			if _, ok := n.labels[label]; !ok {
+				n.labels[label] = struct{}{}
+			}
+		}
 		// 防止默认值设置错误
 		defaultValue := pattern.DefaultValue
 		switch pattern.ValueType {
@@ -116,17 +133,6 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.Items = items
 	n.Errors = []string{}
 	return n
-}
-
-func (n *Normalizer) notInLabels(label string) bool {
-	for _, pattern := range n.Patterns {
-		for _, s := range pattern.LabelKeywords {
-			if strings.EqualFold(s, label) {
-				return true
-			}
-		}
-	}
-	return false
 }
 
 // Parse 文本解析
@@ -183,7 +189,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		matched := false
 		lv := labelValue{}
 		for _, pattern := range n.Patterns {
-			for _, keyword := range pattern.LabelKeywords {
+			for _, keyword := range pattern.Labels {
 				segmentSep := pattern.Separator
 				if segmentSep == "" {
 					segmentSep = ":"
@@ -193,7 +199,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				}
 				segments := strings.Split(lineText, segmentSep)
 				label := strings.TrimSpace(segments[0])
-				if pattern.MatchType == BlurryMatch {
+				if pattern.MatchMethod == FuzzyMatch {
 					matched = strings.Contains(label, strings.ToLower(keyword))
 				} else {
 					matched = strings.EqualFold(label, keyword)
@@ -204,9 +210,9 @@ func (n *Normalizer) Parse() *Normalizer {
 					lv.value = strings.TrimSpace(strings.Join(segments[1:], segmentSep))
 					lv.valueType = pattern.ValueType
 					lv.valueTransform = ValueTransform{
-						MatchType:  pattern.ValueTransform.MatchType,
-						Replaces:   pattern.ValueTransform.Replaces,
-						Separators: pattern.ValueTransform.Separators,
+						MatchMethod: pattern.ValueTransform.MatchMethod,
+						Replaces:    pattern.ValueTransform.Replaces,
+						Separators:  pattern.ValueTransform.Separators,
 					}
 					break
 				}
@@ -228,7 +234,7 @@ func (n *Normalizer) Parse() *Normalizer {
 	for _, line := range kvLines {
 		rawValue := line.value
 		if len(line.valueTransform.Replaces) > 0 {
-			if line.valueTransform.MatchType == BlurryMatch {
+			if line.valueTransform.MatchMethod == FuzzyMatch {
 				rawValue = strings.ToLower(rawValue)
 				replaces := make(map[string]string, len(line.valueTransform.Replaces))
 				for k, v := range line.valueTransform.Replaces {
@@ -261,10 +267,21 @@ func (n *Normalizer) Parse() *Normalizer {
 			rawValue = strings.TrimSpace(rawValue)
 		}
 		var value interface{}
-		var err error
 		switch line.valueType {
 		case booleanValueType:
-			value, err = strconv.ParseBool(rawValue)
+			if rawValue == "" {
+				value = false
+			} else {
+				rawValue = strings.ToLower(rawValue)
+				switch rawValue {
+				case "y", "yes":
+					value = true
+				case "n", "no":
+					value = false
+				default:
+					value, err = strconv.ParseBool(rawValue)
+				}
+			}
 		case intValueType:
 			value, err = strconv.ParseInt(rawValue, 10, 64)
 		case floatValueType:
@@ -319,7 +336,7 @@ func (n *Normalizer) Validate() error {
 		if !inx.StringIn(p1.ValueType, valueTypes...) {
 			return fmt.Errorf("解析规则第 %d 项返回值类型 %s 设置有误，有效的类型为：%s", i+1, p1.ValueType, strings.Join(valueTypes, ", "))
 		}
-		if len(p1.LabelKeywords) == 0 {
+		if len(p1.Labels) == 0 {
 			return fmt.Errorf("解析规则第 %d 项未设置标签关键词", i+1)
 		}
 		for j := i + 1; j < m; j++ {
@@ -327,8 +344,8 @@ func (n *Normalizer) Validate() error {
 			if strings.EqualFold(p1.ValueKey, p2.ValueKey) {
 				return fmt.Errorf("解析规则第 %d 项与第 %d 项 %s 键名重复", i+1, j+1, p1.ValueKey)
 			}
-			for _, k1 := range p1.LabelKeywords {
-				for _, k2 := range p2.LabelKeywords {
+			for _, k1 := range p1.Labels {
+				for _, k2 := range p2.Labels {
 					if strings.EqualFold(k1, k2) {
 						return fmt.Errorf("解析规则第 %d 项与第 %d 项 %s 标签关键词重复", i+1, j+1, k1)
 					}

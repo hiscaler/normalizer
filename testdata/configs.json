@@ -12,15 +12,15 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "your name",
           "name"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "name",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -28,14 +28,14 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "title"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "title",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -57,14 +57,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "style"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "line",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "line": "",
             "lines": ""
@@ -75,16 +75,16 @@
         "default_value": 0
       },
       {
-        "label_keywords": [
+        "labels": [
           "your name",
           "name",
           "your baby name"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "name",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -92,14 +92,14 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Choose your color scheme"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -107,14 +107,14 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Lettering on the back"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "lettering",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "no": "false",
             "yes": "true"
@@ -125,14 +125,14 @@
         "default_value": false
       },
       {
-        "label_keywords": [
+        "labels": [
           "Choose your elements"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "elements",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": [
             ",",
@@ -147,14 +147,14 @@
         "default_value": []
       },
       {
-        "label_keywords": [
+        "labels": [
           "Words carved on the back"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "backendTexts",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -173,14 +173,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Tumbler Color"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "black": "黑色",
             "red": "红色"
@@ -202,14 +202,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Custom text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -228,14 +228,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Custom text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -253,14 +253,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Custom text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -278,14 +278,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Custom text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -303,14 +303,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "you elements"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "numbers",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "four": "4"
           },
@@ -333,14 +333,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "you elements"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "numbers",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "four": "4",
             "fourteen": "14"
@@ -372,18 +372,18 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Type your name here (10 max)",
           "Type your name here (8 max)",
           "Type your name here (6 max)",
           "Type your name here (4 max)",
           "Type your name here (2 max)"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "name",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -391,14 +391,14 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Color Platte"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -406,17 +406,17 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Additional elements (8 max)",
           "Additional elements (6 max)",
           "Additional elements (4 max)",
           "Additional elements (2 max)"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "icons",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": [
             ","
@@ -426,14 +426,14 @@
         "default_value": []
       },
       {
-        "label_keywords": [
+        "labels": [
           "Select Accessories"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "accessories",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -451,14 +451,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "Number of Pieces"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "pieces",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             ",": ""
           },
@@ -493,14 +493,14 @@
     ],
     "patterns": [
       {
-        "label_keywords": [
+        "labels": [
           "mug color"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -508,15 +508,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Size",
           "CHOOSE YOUR SIZE"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "size",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -524,15 +524,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "font",
           "font type"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "font_name",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -540,15 +540,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "font color",
           "color"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "font_color",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -556,15 +556,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Custom Front Text",
           "Custom 1st Text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "front_text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -572,15 +572,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Custom Back Text",
           "Custom 2nd Text"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "back_text",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -588,15 +588,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Custom Front Photo",
           "Custom 1st Photo"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "front_image",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -604,15 +604,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Custom Back Photo",
           "Custom 2nd Photo"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "back_image",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -620,14 +620,14 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Select print area"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "print_area",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {},
           "separators": []
         },
@@ -635,15 +635,15 @@
         "default_value": ""
       },
       {
-        "label_keywords": [
+        "labels": [
           "Beautiful gift box",
           "Beautiful box"
         ],
-        "match_type": 0,
+        "match_method": 0,
         "separator": ":",
         "value_key": "gift_box",
         "value_transform": {
-          "match_type": 1,
+          "match_method": 1,
           "replaces": {
             "YES": "true",
             "NO": "false"
