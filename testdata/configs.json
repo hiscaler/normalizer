@@ -53,7 +53,8 @@
       "Choose your elements",
       "Lettering on the back",
       "Wooden Pegs (Only letters have pegs)",
-      "Stand for the puzzle"
+      "Stand for the puzzle",
+      "other"
     ],
     "patterns": [
       {
@@ -93,9 +94,9 @@
       },
       {
         "labels": [
-          "Choose your color scheme"
+          "color scheme"
         ],
-        "match_method": 0,
+        "match_method": 1,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
@@ -148,9 +149,10 @@
       },
       {
         "labels": [
-          "Words carved on the back"
+          "Words carved on the back",
+          "what's here"
         ],
-        "match_method": 0,
+        "match_method": 1,
         "separator": ":",
         "value_key": "backendTexts",
         "value_transform": {

@@ -9,6 +9,7 @@ import (
 	"github.com/hiscaler/gox/stringx"
 	"github.com/spf13/cast"
 	"go/types"
+	"regexp"
 	"sort"
 	"strconv"
 	"strings"
@@ -205,7 +206,9 @@ func (n *Normalizer) Parse() *Normalizer {
 				segments := strings.Split(lineText, segmentSep)
 				label := strings.TrimSpace(segments[0])
 				if pattern.MatchMethod == FuzzyMatch {
-					matched = strings.Contains(label, strings.ToLower(keyword))
+					// 匹配单词（忽略大小写）
+					reg := regexp.MustCompile(`(?i)(^|([\s\t\n]+))(` + keyword + `)($|([\s\t\n]+))`)
+					matched = reg.MatchString(label)
 				} else {
 					matched = strings.EqualFold(label, keyword)
 				}

@@ -11,8 +11,8 @@
   },
   {
     "useName": "test2",
-    "description": "名字拼图",
-    "text": "Notes:\nStyle : 1 Line\nChoose your color scheme : Rainbow\nYour baby name : Chance\nChoose your elements : 09, 12\nLettering on the back : No\nWooden Pegs (Only letters have pegs) : Yes\nStand for the puzzle : No",
+    "description": "名字拼图（模糊搜索）",
+    "text": "Notes:\nStyle : 1 Line\nChoose your color scheme : Rainbow\nYour baby name : Chance\nChoose your elements : 09, 12\nLettering on the back : No\nWooden Pegs (Only letters have pegs) : Yes\nStand for the puzzle : No\nwhat's here name?:Your baby name: John\nAge: 12\nOther:abc",
     "ok": true,
     "want": {
       "color": "Rainbow",
@@ -23,7 +23,7 @@
       "line": 1,
       "name": "Chance",
       "lettering": false,
-      "backendTexts": ""
+      "backendTexts": "Your baby name: John\nAge: 12"
     }
   },
   {
