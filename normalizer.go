@@ -24,8 +24,21 @@ const (
 )
 
 const (
-	ExactMatch = iota // 精准匹配
-	FuzzyMatch        // 模糊匹配（只要包含相应的文本即认为匹配成功）
+	// ExactMatch 精准匹配
+	//
+	// 必须是完整的匹配
+	// 比如 name 仅仅匹配 name 这个文本，不会匹配 baby name, your name?, please input you name!
+	ExactMatch = iota
+	// FuzzyMatch 模糊匹配
+	//
+	// 只要包含相应的文本单词即认为匹配成功，需要注意这里匹配的是单词，而不是文本。
+	//
+	// 比如 name 匹配 baby name, your name?, please input you name!
+	//
+	// 但是不会匹配 baby username, you username?, please input you username!
+	//
+	// 原因是虽然 username 单词中包含 name 字符，但是 name 和 username 不是同一个单词，所以会匹配失败。
+	FuzzyMatch
 )
 
 type ValueTransform struct {
