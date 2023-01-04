@@ -124,6 +124,17 @@
     }
   },
   {
+    "useName": "test6-文本中包含标签",
+    "description": "文本中包含标签",
+    "text": "Name: John\nyear: 12\nText: My name: John\nAnother year older\nNext year: 13",
+    "ok": true,
+    "want": {
+      "name": "John",
+      "year": 12,
+      "text":"My name: John\nAnother year older\nNext year: 13"
+    }
+  },
+  {
     "useName": "shopify",
     "description": "Shopify 测试1",
     "text": "Type your name here (10 max):Beckham/Color Platte:Pastel-Boy/Additional elements (8 max):giraffe,fox,panda,soccer,rugby,basketball,fire engine,ice-cream truck-1/Select Accessories:Add Pegs | $2.90",

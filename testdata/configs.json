@@ -357,6 +357,57 @@
       }
     ]
   },
+  "test6-文本中包含标签": {
+    "separator": "\n",
+    "labels": [],
+    "patterns": [
+      {
+        "labels": [
+          "name"
+        ],
+        "match_method": 0,
+        "separator": ":",
+        "value_key": "name",
+        "value_transform": {
+          "match_method": 0,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      },
+      {
+        "labels": [
+          "year"
+        ],
+        "match_method": 0,
+        "separator": ":",
+        "value_key": "year",
+        "value_transform": {
+          "match_method": 0,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "int",
+        "default_value": 0
+      },
+      {
+        "labels": [
+          "text"
+        ],
+        "match_method": 0,
+        "separator": ":",
+        "value_key": "text",
+        "value_transform": {
+          "match_method": 0,
+          "replaces": {},
+          "separators": []
+        },
+        "value_type": "string",
+        "default_value": ""
+      }
+    ]
+  },
   "shopify": {
     "separator": "/",
     "labels": [
