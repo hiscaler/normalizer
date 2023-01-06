@@ -210,7 +210,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 
 		isPureText := true // 是否为纯文本（不包含标签）
-		lowerLineText := strings.ToLower(lineText)
+		lowerLineText := cleanLabel(lineText, n.strictMode)
 		for label := range n.labels {
 			if strings.HasPrefix(lowerLineText, label) {
 				isPureText = false
@@ -241,7 +241,7 @@ func (n *Normalizer) Parse() *Normalizer {
 					continue
 				}
 				segments := strings.Split(lineText, segmentSep)
-				label := cleanLabel(strings.TrimSpace(segments[0]), n.strictMode)
+				label := cleanLabel(segments[0], n.strictMode)
 				if pattern.MatchMethod == FuzzyMatch {
 					// 匹配单词（忽略大小写）
 					reg := regexp.MustCompile(`(?i)(^|([\s\t\n]+))(` + keyword + `)($|([\s\t\n]+))`)

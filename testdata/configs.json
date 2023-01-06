@@ -47,6 +47,7 @@
   "test2": {
     "separator": "\n",
     "labels": [
+      "Notes",
       "Style",
       "Choose your color scheme",
       "Your baby name",
@@ -94,9 +95,10 @@
       },
       {
         "labels": [
-          "color scheme"
+          "color scheme",
+          "Choose     your     color     scheme  "
         ],
-        "match_method": 1,
+        "match_method": 0,
         "separator": ":",
         "value_key": "color",
         "value_transform": {
