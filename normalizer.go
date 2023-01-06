@@ -41,6 +41,11 @@ const (
 	FuzzyMatch
 )
 
+var (
+	rxSpaceless            = regexp.MustCompile("\\s{2,}")
+	spaceCharacterReplacer = strings.NewReplacer("　", " ") // 全角空格替换
+)
+
 type ValueTransform struct {
 	MatchMethod int               `json:"match_method"` // 匹配方式（0: 精准匹配、1: 模糊匹配）
 	Replaces    map[string]string `json:"replaces"`     // 需要替换的字符串
@@ -59,9 +64,10 @@ type NormalizePattern struct {
 
 type Normalizer struct {
 	labels       map[string]struct{}    // 文本中所有的标签
+	separator    string                 // 文本行分隔符
+	strictMode   bool                   // 严格模式
 	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
-	Separator    string                 // 文本行分隔符
 	Patterns     []NormalizePattern     // 解析规则
 	Items        map[string]interface{} // 解析后返回的值
 }
@@ -69,14 +75,27 @@ type Normalizer struct {
 func NewNormalizer() *Normalizer {
 	return &Normalizer{
 		Errors:    []string{},
-		Separator: "\n",
+		separator: "\n",
 		Items:     make(map[string]interface{}, 0),
 	}
 }
 
 // SetSeparator 设置文本行分隔符
 func (n *Normalizer) SetSeparator(sep string) *Normalizer {
-	n.Separator = sep
+	n.separator = sep
+	return n
+}
+
+// SetStrictMode 设置是否为严格模式，默认为宽松模式
+//
+// 与之相对应的是宽松模式，严格模式下，会区分标签字符的大小写，且不会去掉设置标签和定制内容标间单词之间多余的空格，
+// 宽松模式下则会去掉，仅保留一个。
+//
+// 比如：
+//
+// "Please input you      name" 在宽松模式下则会变为 "please input you name" 进行比较
+func (n *Normalizer) SetStrictMode(strictMode bool) *Normalizer {
+	n.strictMode = strictMode
 	return n
 }
 
@@ -88,17 +107,22 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	return n
 }
 
-func cleanLabel(label string) string {
+func cleanLabel(label string, strictMode bool) string {
 	if label == "" {
 		return ""
 	}
-	return strings.ToLower(strings.TrimSpace(label))
+	label = strings.TrimSpace(label)
+	if strictMode {
+		return label
+	}
+	label = rxSpaceless.ReplaceAllLiteralString(spaceCharacterReplacer.Replace(label), " ")
+	return strings.ToLower(label)
 }
 
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
 	cleanedLabels := make(map[string]struct{}, len(labels))
 	for _, label := range labels {
-		label = cleanLabel(label)
+		label = cleanLabel(label, n.strictMode)
 		if label == "" {
 			continue
 		}
@@ -123,7 +147,7 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 			}
 		}
 		for _, label := range pattern.Labels {
-			label = cleanLabel(label)
+			label = cleanLabel(label, n.strictMode)
 			if label == "" {
 				continue
 			}
@@ -179,7 +203,7 @@ func (n *Normalizer) Parse() *Normalizer {
 
 	kvLines := make([]labelValue, 0)
 	appendText := true
-	for _, lineText := range strings.Split(n.OriginalText, n.Separator) {
+	for _, lineText := range strings.Split(n.OriginalText, n.separator) {
 		lineText = strings.TrimSpace(lineText)
 		if lineText == "" {
 			continue
@@ -217,13 +241,13 @@ func (n *Normalizer) Parse() *Normalizer {
 					continue
 				}
 				segments := strings.Split(lineText, segmentSep)
-				label := strings.TrimSpace(segments[0])
+				label := cleanLabel(strings.TrimSpace(segments[0]), n.strictMode)
 				if pattern.MatchMethod == FuzzyMatch {
 					// 匹配单词（忽略大小写）
 					reg := regexp.MustCompile(`(?i)(^|([\s\t\n]+))(` + keyword + `)($|([\s\t\n]+))`)
 					matched = reg.MatchString(label)
 				} else {
-					matched = strings.EqualFold(label, keyword)
+					matched = label == cleanLabel(keyword, n.strictMode)
 				}
 				if matched {
 					lv.key = pattern.ValueKey
@@ -337,7 +361,7 @@ func (n *Normalizer) Parse() *Normalizer {
 
 // Validate 验证设置是否有效
 func (n *Normalizer) Validate() error {
-	if n.Separator == "" {
+	if n.separator == "" {
 		return errors.New("文本行分隔符不能为空")
 	}
 	m := len(n.Patterns)
