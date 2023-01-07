@@ -69,6 +69,7 @@ type Normalizer struct {
 	separator    string                 // 文本行分隔符
 	strictMode   bool                   // 严格模式
 	validate     bool                   // 设置是否有效
+	items        map[string]bool        // 使用默认值还是新值
 	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
 	Patterns     []NormalizePattern     // 解析规则
@@ -109,6 +110,7 @@ func (n *Normalizer) SetStrictMode(strictMode bool) *Normalizer {
 func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	n.OriginalText = strings.TrimSpace(text)
 	n.Items = map[string]interface{}{}
+	n.items = map[string]bool{}
 	n.Errors = []string{}
 	return n
 }
@@ -141,7 +143,8 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 	n.validate = false
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
-	for i, pattern := range n.Patterns {
+	for i := range n.Patterns {
+		pattern := n.Patterns[i]
 		// 规则设置规则
 		if pattern.Separator == "" {
 			n.Patterns[i].Separator = ":" // Default separator value
@@ -181,6 +184,7 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 			defaultValue = cast.ToString(defaultValue)
 		}
 		items[pattern.ValueKey] = defaultValue
+		n.items[pattern.ValueKey] = true
 	}
 	n.Items = items
 	n.Errors = []string{}
@@ -244,7 +248,8 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 		matched := false
 		lv := labelValue{}
-		for i, pattern := range n.Patterns {
+		for i := range n.Patterns {
+			pattern := n.Patterns[i]
 			if pattern.used {
 				continue
 			}
@@ -289,7 +294,8 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 	}
 
-	for _, line := range lines {
+	for i := range lines {
+		line := lines[i]
 		rawValue := line.value
 		if len(line.valueTransform.Replaces) > 0 {
 			if line.valueTransform.MatchMethod == FuzzyMatch {
@@ -353,20 +359,24 @@ func (n *Normalizer) Parse() *Normalizer {
 		if v, ok := n.Items[line.key]; ok {
 			switch line.valueType {
 			case stringValueType:
-				if v != "" {
-					v = fmt.Sprintf("%s\n%s", v, value)
-				} else {
-					v = value
+				if v != "" && !n.items[line.key] {
+					value = fmt.Sprintf("%s\n%s", v, value)
 				}
-				n.Items[line.key] = v
+				n.Items[line.key] = value
 			case arrayValueType:
-				n.Items[line.key] = append(v.([]interface{}), value.([]interface{})...)
+				if n.items[line.key] {
+					value = value.([]interface{})
+				} else {
+					value = append(v.([]interface{}), value.([]interface{})...)
+				}
+				n.Items[line.key] = value
 			default:
 				n.Items[line.key] = value
 			}
 		} else {
 			n.Items[line.key] = value
 		}
+		n.items[line.key] = false // 没有使用默认值了
 	}
 
 	return n
