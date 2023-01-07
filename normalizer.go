@@ -117,9 +117,8 @@ func clean(label string, strictMode bool) string {
 	if label == "" {
 		return ""
 	}
-	label = strings.TrimSpace(label)
 	if strictMode {
-		return label
+		return strings.TrimSpace(label)
 	}
 	label = rxSpaceless.ReplaceAllLiteralString(spaceCharacterReplacer.Replace(label), " ")
 	return strings.ToLower(strings.TrimSpace(label))
