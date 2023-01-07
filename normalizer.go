@@ -121,7 +121,7 @@ func clean(label string, strictMode bool) string {
 		return label
 	}
 	label = rxSpaceless.ReplaceAllLiteralString(spaceCharacterReplacer.Replace(label), " ")
-	return strings.ToLower(label)
+	return strings.ToLower(strings.TrimSpace(label))
 }
 
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
