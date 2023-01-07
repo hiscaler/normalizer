@@ -1,6 +1,7 @@
 package normalizer
 
 import (
+	"encoding/json"
 	"errors"
 	"fmt"
 	"github.com/hiscaler/gox/inx"
@@ -419,7 +420,12 @@ func (n *Normalizer) Ok() bool {
 	return len(n.Errors) == 0
 }
 
-// Output 输出 JSON 字符串
-func (n *Normalizer) Output() string {
+// ToJson 输出 JSON 字符
+func (n *Normalizer) ToJson() string {
 	return jsonx.ToPrettyJson(n.Items)
+}
+
+// ToJsonRawMessage 转换为 json.RawMessage
+func (n *Normalizer) ToJsonRawMessage() (json.RawMessage, error) {
+	return jsonx.ToRawMessage(n.Items, "{}")
 }
