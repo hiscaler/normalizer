@@ -28,6 +28,12 @@ name:John\nage: 12 years\nfuns:Basketball,Football and Swimming
 go get github.com/hiscaler/normalizer
 ```
 
+## 数据规格说明
+
+每一个合规的数据分为标签和值两部分，比如：`number:123`
+`number` 为标签
+`123` 为值
+
 ## 使用
 
 ```go
@@ -83,8 +89,12 @@ fmt.Printf("items = %#v", normalizer.Items)
 map[string]interface {}{"age":12, "funs":[]interface {}{"Basketball", "Football", "Swimming"}, "name":"John"}
 ```
 
+针对标签的匹配，分为严格、宽松两种模式，无论是哪种模式，处理引擎都将去掉标签前后的空格。宽松模式则更进一步，将标签中多余的空格（包括全角空格）压缩为一个，比如标签为：`you     name`，使用松散模式下将会转换为 `you name` 进行匹配。
+
+针对每一个匹配规则，单独设置了 `match_method` 属性，0 为完整匹配，1 为模糊匹配，默认情况为 0。模糊匹配下，将会根据标签中是否包含对应的单词来确定匹配结果。
+
 ## 注意
 
 在使用 Parse() 方法对文本进行解析之后，您应该使用 normalizer.Ok() 来判断处理结果是否存在错误，为 false 的情况下，您可以通过 normalizer.Errors() 来获取所有的错误信息，以决定后续的业务流程。
 
-在使用 Parse() 方法之前，您也可以使用 Validate() 方法来判断您的设置是否正确。比如未设置文本分隔符、重复的 key 等情况错误存在的情况下，Validate() 方法将返回对应的错误。
+在使用 Parse() 方法之前，您也可以使用 Validate() 方法来判断您的设置是否正确。比如未设置键名或者为空、重复的 key 等错误存在的情况下，Validate() 方法将返回对应的错误。

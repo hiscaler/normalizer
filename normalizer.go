@@ -53,6 +53,7 @@ type ValueTransform struct {
 }
 
 type NormalizePattern struct {
+	used           bool           `json:"used"`            // 是否使用过（用于内部判断是否需要使用该规则）
 	Labels         []string       `json:"labels"`          // 标签关键词（可以有多个）
 	MatchMethod    int            `json:"match_method"`    // 匹配方式（0: 精准匹配、1: 模糊匹配）
 	Separator      string         `json:"separator"`       // 文本段分隔符
@@ -60,13 +61,13 @@ type NormalizePattern struct {
 	ValueTransform ValueTransform `json:"value_transform"` // 值转化设置
 	ValueType      string         `json:"value_type"`      // 值类型
 	DefaultValue   interface{}    `json:"default_value"`   // 默认值
-	used           bool           `json:"used"`            // 是否使用过（用于内部判断是否需要使用该规则）
 }
 
 type Normalizer struct {
 	labels       map[string]struct{}    // 文本中所有的标签
 	separator    string                 // 文本行分隔符
 	strictMode   bool                   // 严格模式
+	validate     bool                   // 设置是否有效
 	Errors       []string               // 错误信息
 	OriginalText string                 // 原始的文本
 	Patterns     []NormalizePattern     // 解析规则
@@ -137,6 +138,7 @@ func (n *Normalizer) SetLabels(labels []string) *Normalizer {
 
 // SetPatterns 设置匹配规则
 func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
+	n.validate = false
 	n.Patterns = patterns
 	items := make(map[string]interface{}, len(patterns))
 	for i, pattern := range n.Patterns {
@@ -187,10 +189,6 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 
 // Parse 文本解析
 func (n *Normalizer) Parse() *Normalizer {
-	for i := range n.Patterns {
-		// Reset
-		n.Patterns[i].used = false
-	}
 	n.Errors = []string{}
 	if len(n.Patterns) == 0 || n.OriginalText == "" {
 		return n
@@ -201,6 +199,11 @@ func (n *Normalizer) Parse() *Normalizer {
 		return n
 	}
 
+	for i := range n.Patterns {
+		// Reset
+		n.Patterns[i].used = false
+	}
+
 	type labelValue struct {
 		key            string
 		label          string
@@ -209,7 +212,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		valueTransform ValueTransform
 	}
 
-	kvLines := make([]labelValue, 0)
+	lines := make([]labelValue, 0)
 	appendText := true
 	for _, lineText := range strings.Split(n.OriginalText, n.separator) {
 		lineText = strings.TrimSpace(lineText)
@@ -226,19 +229,18 @@ func (n *Normalizer) Parse() *Normalizer {
 			}
 		}
 		if isPureText && appendText {
-			m := len(kvLines)
-			if m > 0 {
-				m--
-				kvLines = append(kvLines, labelValue{
-					key:            kvLines[m].key,
-					label:          kvLines[m].label,
-					value:          lineText,
-					valueType:      kvLines[m].valueType,
-					valueTransform: kvLines[m].valueTransform,
-				})
-			} else {
+			m := len(lines)
+			if m == 0 {
 				continue
 			}
+			m--
+			lines = append(lines, labelValue{
+				key:            lines[m].key,
+				label:          lines[m].label,
+				value:          lineText,
+				valueType:      lines[m].valueType,
+				valueTransform: lines[m].valueTransform,
+			})
 		}
 		matched := false
 		lv := labelValue{}
@@ -246,12 +248,11 @@ func (n *Normalizer) Parse() *Normalizer {
 			if pattern.used {
 				continue
 			}
-			segmentSep := pattern.Separator
-			if !strings.Contains(lineText, segmentSep) {
+			separatorIndex := strings.Index(lineText, pattern.Separator)
+			if separatorIndex == -1 {
 				continue
 			}
-			segments := strings.Split(lineText, segmentSep)
-			label := clean(segments[0], n.strictMode)
+			label := clean(lineText[0:separatorIndex], n.strictMode)
 			for _, keyword := range pattern.Labels {
 				if pattern.MatchMethod == FuzzyMatch {
 					// 匹配单词（忽略大小写）
@@ -263,7 +264,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				if matched {
 					lv.key = pattern.ValueKey
 					lv.label = label
-					lv.value = strings.TrimSpace(strings.Join(segments[1:], segmentSep))
+					lv.value = strings.TrimSpace(lineText[separatorIndex+1:])
 					lv.valueType = pattern.ValueType
 					lv.valueTransform = ValueTransform{
 						MatchMethod: pattern.ValueTransform.MatchMethod,
@@ -280,7 +281,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 		if matched {
 			appendText = true
-			kvLines = append(kvLines, lv)
+			lines = append(lines, lv)
 		} else {
 			if !isPureText {
 				appendText = false
@@ -288,7 +289,7 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 	}
 
-	for _, line := range kvLines {
+	for _, line := range lines {
 		rawValue := line.value
 		if len(line.valueTransform.Replaces) > 0 {
 			if line.valueTransform.MatchMethod == FuzzyMatch {
@@ -373,8 +374,8 @@ func (n *Normalizer) Parse() *Normalizer {
 
 // Validate 验证设置是否有效
 func (n *Normalizer) Validate() error {
-	if n.separator == "" {
-		return errors.New("文本行分隔符不能为空")
+	if n.validate {
+		return nil
 	}
 	m := len(n.Patterns)
 	if m == 0 {
@@ -409,6 +410,7 @@ func (n *Normalizer) Validate() error {
 		}
 	}
 
+	n.validate = true
 	return nil
 }
 
