@@ -82,6 +82,9 @@ func NewNormalizer() *Normalizer {
 
 // SetSeparator 设置文本行分隔符
 func (n *Normalizer) SetSeparator(sep string) *Normalizer {
+	if sep == "" {
+		sep = "\n"
+	}
 	n.separator = sep
 	return n
 }
@@ -107,7 +110,7 @@ func (n *Normalizer) SetOriginalText(text string) *Normalizer {
 	return n
 }
 
-func cleanLabel(label string, strictMode bool) string {
+func clean(label string, strictMode bool) string {
 	if label == "" {
 		return ""
 	}
@@ -122,11 +125,10 @@ func cleanLabel(label string, strictMode bool) string {
 func (n *Normalizer) SetLabels(labels []string) *Normalizer {
 	cleanedLabels := make(map[string]struct{}, len(labels))
 	for _, label := range labels {
-		label = cleanLabel(label, n.strictMode)
-		if label == "" {
-			continue
+		label = clean(label, n.strictMode)
+		if label != "" {
+			cleanedLabels[label] = struct{}{}
 		}
-		cleanedLabels[label] = struct{}{}
 	}
 	n.labels = cleanedLabels
 	return n
@@ -147,7 +149,7 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 			}
 		}
 		for _, label := range pattern.Labels {
-			label = cleanLabel(label, n.strictMode)
+			label = clean(label, n.strictMode)
 			if label == "" {
 				continue
 			}
@@ -210,9 +212,9 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 
 		isPureText := true // 是否为纯文本（不包含标签）
-		lowerLineText := cleanLabel(lineText, n.strictMode)
+		cleanedLineText := clean(lineText, n.strictMode)
 		for label := range n.labels {
-			if strings.HasPrefix(lowerLineText, label) {
+			if strings.HasPrefix(cleanedLineText, label) {
 				isPureText = false
 				break
 			}
@@ -241,13 +243,13 @@ func (n *Normalizer) Parse() *Normalizer {
 					continue
 				}
 				segments := strings.Split(lineText, segmentSep)
-				label := cleanLabel(segments[0], n.strictMode)
+				label := clean(segments[0], n.strictMode)
 				if pattern.MatchMethod == FuzzyMatch {
 					// 匹配单词（忽略大小写）
 					reg := regexp.MustCompile(`(?i)(^|([\s\t\n]+))(` + keyword + `)($|([\s\t\n]+))`)
 					matched = reg.MatchString(label)
 				} else {
-					matched = label == cleanLabel(keyword, n.strictMode)
+					matched = label == clean(keyword, n.strictMode)
 				}
 				if matched {
 					lv.key = pattern.ValueKey
