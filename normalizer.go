@@ -309,22 +309,21 @@ func (n *Normalizer) Parse() *Normalizer {
 
 			// 根据字符的长度执行替换的顺序，比如替换 {"fourteen": 14, "four": 4} 的规则应用于
 			// `fourteen,four` 替换后的值为 `14,4`
-			keys := make([]string, 0)
-			for k := range line.valueTransform.Replaces {
-				keys = append(keys, k)
+			k := 0
+			keys := make([]string, len(line.valueTransform.Replaces))
+			for key := range line.valueTransform.Replaces {
+				keys[k] = key
+				k++
 			}
-			if len(keys) > 0 {
-				sort.Slice(keys, func(i, j int) bool {
-					return len(keys[i]) > len(keys[j])
-				})
-				oldNews := make([]string, len(keys)*2)
-				for i, key := range keys {
-					oldNews[i*2] = key
-					oldNews[i*2+1] = line.valueTransform.Replaces[key]
-				}
-				rawValue = strings.NewReplacer(oldNews...).Replace(rawValue)
+			sort.Slice(keys, func(i, j int) bool {
+				return len(keys[i]) > len(keys[j])
+			})
+			oldNews := make([]string, len(keys)*2)
+			for ki, key := range keys {
+				oldNews[ki*2] = key
+				oldNews[ki*2+1] = line.valueTransform.Replaces[key]
 			}
-
+			rawValue = strings.NewReplacer(oldNews...).Replace(rawValue)
 			rawValue = strings.TrimSpace(rawValue)
 		}
 		var value interface{}
