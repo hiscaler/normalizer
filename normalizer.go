@@ -60,6 +60,7 @@ type NormalizePattern struct {
 	ValueTransform ValueTransform `json:"value_transform"` // 值转化设置
 	ValueType      string         `json:"value_type"`      // 值类型
 	DefaultValue   interface{}    `json:"default_value"`   // 默认值
+	used           bool           `json:"used"`            // 是否使用过（用于内部判断是否需要使用该规则）
 }
 
 type Normalizer struct {
@@ -148,8 +149,9 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 				delete(n.Patterns[i].ValueTransform.Replaces, k)
 			}
 		}
-		for _, label := range pattern.Labels {
+		for j, label := range pattern.Labels {
 			label = clean(label, n.strictMode)
+			n.Patterns[i].Labels[j] = label
 			if label == "" {
 				continue
 			}
@@ -185,6 +187,10 @@ func (n *Normalizer) SetPatterns(patterns []NormalizePattern) *Normalizer {
 
 // Parse 文本解析
 func (n *Normalizer) Parse() *Normalizer {
+	for i := range n.Patterns {
+		// Reset
+		n.Patterns[i].used = false
+	}
 	n.Errors = []string{}
 	if len(n.Patterns) == 0 || n.OriginalText == "" {
 		return n
@@ -236,20 +242,23 @@ func (n *Normalizer) Parse() *Normalizer {
 		}
 		matched := false
 		lv := labelValue{}
-		for _, pattern := range n.Patterns {
+		for i, pattern := range n.Patterns {
+			if pattern.used {
+				continue
+			}
+			segmentSep := pattern.Separator
+			if !strings.Contains(lineText, segmentSep) {
+				continue
+			}
+			segments := strings.Split(lineText, segmentSep)
+			label := clean(segments[0], n.strictMode)
 			for _, keyword := range pattern.Labels {
-				segmentSep := pattern.Separator
-				if !strings.Contains(lineText, segmentSep) {
-					continue
-				}
-				segments := strings.Split(lineText, segmentSep)
-				label := clean(segments[0], n.strictMode)
 				if pattern.MatchMethod == FuzzyMatch {
 					// 匹配单词（忽略大小写）
 					reg := regexp.MustCompile(`(?i)(^|([\s\t\n]+))(` + keyword + `)($|([\s\t\n]+))`)
 					matched = reg.MatchString(label)
 				} else {
-					matched = label == clean(keyword, n.strictMode)
+					matched = label == keyword
 				}
 				if matched {
 					lv.key = pattern.ValueKey
@@ -265,6 +274,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				}
 			}
 			if matched {
+				n.Patterns[i].used = true
 				break
 			}
 		}
