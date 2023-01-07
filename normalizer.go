@@ -53,7 +53,7 @@ type ValueTransform struct {
 }
 
 type NormalizePattern struct {
-	used           bool           `json:"used"`            // 是否使用过（用于内部判断是否需要使用该规则）
+	used           bool           // 是否使用过（用于内部判断是否需要使用该规则）
 	Labels         []string       `json:"labels"`          // 标签关键词（可以有多个）
 	MatchMethod    int            `json:"match_method"`    // 匹配方式（0: 精准匹配、1: 模糊匹配）
 	Separator      string         `json:"separator"`       // 文本段分隔符
