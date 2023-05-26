@@ -613,7 +613,9 @@
       {
         "labels": [
           "Custom Front Text",
-          "Custom 1st Text"
+          "Custom 1st Text",
+          "Custom 1st Text - Line 1",
+          "Custom 1st Text - Line 2"
         ],
         "match_method": 0,
         "separator": ":",

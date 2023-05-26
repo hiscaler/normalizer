@@ -220,5 +220,23 @@
       "print_area": "Print front",
       "gift_box": true
     }
+  },
+  {
+    "useName": "mug",
+    "description": "马克杯-3 带 line",
+    "text": "mug color: black\nCustom Front Photo: Capture+_2019-10-30-08-08-24-1.png\nFont Type: Fredericka the Great\nFont Color: black (#000000)\nCustom 1st Text - Line 1: Gracias  por compartir con migo  de tu valioso tiempo** te quiero mucho \n       Feliz Navidad  y Prospero Año Nuevo 2023   Atte: FH\nCustom 1st Text - Line 2: test\nSelect print area: Print front\nBeautiful gift box: yes",
+    "ok": true,
+    "want": {
+      "color": "black",
+      "size": "",
+      "font_name": "Fredericka the Great",
+      "font_color": "black (#000000)",
+      "front_text": "Gracias  por compartir con migo  de tu valioso tiempo** te quiero mucho\nFeliz Navidad  y Prospero Año Nuevo 2023   Atte: FH\ntest",
+      "back_text": "",
+      "front_image": "Capture+_2019-10-30-08-08-24-1.png",
+      "back_image": "",
+      "print_area": "Print front",
+      "gift_box": true
+    }
   }
 ]

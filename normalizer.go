@@ -280,7 +280,7 @@ func (n *Normalizer) Parse() *Normalizer {
 				}
 			}
 			if matched {
-				n.Patterns[i].used = true
+				// n.Patterns[i].used = true
 				break
 			}
 		}
